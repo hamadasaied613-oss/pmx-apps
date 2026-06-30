@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ar" data-theme="pmo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMX — Sweep Control Panel</title>
+  <link rel="stylesheet" href="../pmx-ui/css/pmx-variables.css">
+  <link rel="stylesheet" href="../pmx-ui/css/pmx-components.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0A1628; color: #E6E6E6; padding: 20px; }
+    .panel { max-width: 700px; margin: 0 auto; }
+    h1 { color: #C9A84C; font-size: 22px; margin-bottom: 4px; }
+    .sub { color: #8892B0; font-size: 13px; margin-bottom: 20px; }
+    .card { background: #112240; border: 1px solid #1E3A5F; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+    .card h2 { color: #C9A84C; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 14px 0; padding-bottom: 8px; border-bottom: 1px solid #1E3A5F; }
+    .flex { display: flex; justify-content: space-between; align-items: center; }
+    .flex-col { display: flex; flex-direction: column; gap: 6px; }
+    .value { color: #E6E6E6; font-size: 14px; }
+    .label { color: #8892B0; font-size: 11px; }
+    .badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+    .badge-green { background: #0D2A1A; color: #27AE60; border: 1px solid #27AE60; }
+    .badge-red { background: #2A0D0D; color: #E74C3C; border: 1px solid #E74C3C; }
+    .badge-gold { background: #1A1500; color: #C9A84C; border: 1px solid #C9A84C; }
+    .btn { padding: 10px 20px; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .btn-gold { background: #C9A84C; color: #0A1628; }
+    .btn-red { background: #E74C3C; color: white; }
+    .btn-sec { background: #1E3A5F; color: #E6E6E6; }
+    .btn-sm { padding: 6px 14px; font-size: 12px; }
+    .divider { border-top: 1px solid #1E3A5F; margin: 16px 0; }
+    .arrow-flow { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 16px; background: #0A1628; border-radius: 8px; margin: 12px 0; }
+    .arrow-flow .box { padding: 10px 18px; background: #1E3A5F; border-radius: 6px; font-size: 13px; text-align: center; }
+    .arrow-flow .arrow { color: #C9A84C; font-size: 20px; }
+    .pin-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,22,40,0.95); display: flex; align-items: center; justify-content: center; z-index: 999; }
+    .pin-box { background: #112240; border: 1px solid #1E3A5F; border-radius: 12px; padding: 40px; text-align: center; max-width: 360px; }
+    .pin-box h2 { color: #C9A84C; margin-bottom: 8px; }
+    .pin-input { width: 200px; padding: 12px; background: #0A1628; border: 2px solid #1E3A5F; border-radius: 8px; color: #E6E6E6; font-size: 24px; text-align: center; letter-spacing: 8px; margin: 16px 0; }
+    .pin-input:focus { outline: none; border-color: #C9A84C; }
+    .pin-error { color: #E74C3C; font-size: 12px; display: none; }
+    .log-item { padding: 10px 0; border-bottom: 1px solid #0A1628; font-size: 13px; display: flex; justify-content: space-between; }
+    .log-item .time { color: #8892B0; }
+
+    /* Login Screen */
+    #loginScreen { display: flex; }
+    #panelContent { display: none; }
+  </style>
+</head>
+<body>
+  <!-- PIN Login -->
+  <div id="loginScreen" class="pin-overlay">
+    <div class="pin-box">
+      <h2>&#128274; PMX Sweep Control</h2>
+      <p style="color:#8892B0;font-size:13px">أدخل رمز الدخول</p>
+      <input id="pinInput" type="password" class="pin-input" maxlength="4" oninput="checkPin()" placeholder="****" autofocus>
+      <div id="pinError" class="pin-error">&#9888; رمز خطأ</div>
+    </div>
+  </div>
+
+  <!-- Main Panel -->
+  <div id="panelContent" class="panel">
+    <div class="flex" style="margin-bottom:8px">
+      <div>
+        <h1>&#9881; Sweep Control Panel</h1>
+        <p class="sub">تحكم في تدفق الفلوس من PayPal إلى الحساب النهائي</p>
+      </div>
+      <span id="statusBadge" class="badge badge-green">&#9679; نشط</span>
+    </div>
+
+    <!-- Current Flow -->
+    <div class="card">
+      <h2>&#128200; التدفق الحالي</h2>
+      <div class="arrow-flow">
+        <div class="box">&#128179; PayPal</div>
+        <div class="arrow">&#8594;</div>
+        <div class="box">&#128179; محمد (ADCB)</div>
+        <div class="arrow">&#8594;</div>
+        <div class="box" style="background:#C9A84C;color:#0A1628">&#128176; فاطمة (نهائي)</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="card">
+      <h2>&#9881; التحكم</h2>
+      <div class="flex" style="margin-bottom:12px">
+        <span class="value">السحب التلقائي</span>
+        <button id="toggleBtn" class="btn btn-red btn-sm" onclick="toggleSweep()">&#10060; إيقاف</button>
+      </div>
+      <div class="flex">
+        <span class="value">الإشعارات (تيليجرام)</span>
+        <button id="notifyBtn" class="btn btn-gold btn-sm" onclick="toggleNotify()">&#9679; شغال</button>
+      </div>
+    </div>
+
+    <!-- Accounts -->
+    <div class="card">
+      <h2>&#128179; الحسابات</h2>
+      <div class="flex-col">
+        <div class="flex"><span class="label">المصدر (Account A):</span><span class="value">محمد — ADCB</span></div>
+        <div class="flex"><span class="value" style="font-family:monospace;font-size:12px">AE490030013258812810001</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="flex-col">
+        <div class="flex"><span class="label">الوجهة (Account B):</span><span class="value">فاطمة</span></div>
+        <div class="flex"><span class="value" style="font-family:monospace;font-size:12px">AE750240009523186299701</span></div>
+      </div>
+    </div>
+
+    <!-- Scenarios -->
+    <div class="card">
+      <h2>&#128279; السيناريوهات المستقبلية</h2>
+      <div class="flex" style="margin-bottom:10px">
+        <span class="value">&#9679; الحالي: PayPal &#8594; محمد &#8594; فاطمة</span>
+        <span class="badge badge-green">مفعل</span>
+      </div>
+      <div class="flex" style="opacity:0.5">
+        <span class="value">&#9679; البديل: PayPal &#8594; فاطمة (عندها PayPal)</span>
+        <button class="btn btn-sec btn-sm" disabled>تفعيل</button>
+      </div>
+      <p style="font-size:12px;color:#8892B0;margin-top:12px">لما تعمل لفاطمة حساب PayPal — أشغّل هذا السيناريو بنقرة.</p>
+    </div>
+
+    <!-- History Log -->
+    <div class="card">
+      <h2>&#128214; سجل التدفق</h2>
+      <div id="logContainer">
+        <div class="log-item"><span class="time">30/06/2026</span><span>النظام جاهز — في انتظار أول دفعة</span></div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="flex" style="gap:10px;margin-top:4px">
+      <button class="btn btn-gold" onclick="manualSweep()">&#128176; Sweep يدوي الآن</button>
+      <button class="btn btn-sec" onclick="window.location='../start_pmx.bat'">&#8592; الرجوع للرئيسية</button>
+    </div>
+
+    <p style="text-align:center;font-size:11px;color:#8892B0;margin-top:24px">
+      &#128274; AES-256 محلياً · كل البيانات على D:\
+    </p>
+  </div>
+
+  <script>
+    const PIN = '2510';
+    let sweepActive = true;
+    let notifyActive = true;
+    const API = 'http://localhost:3456';
+
+    function checkPin() {
+      const val = document.getElementById('pinInput').value;
+      if (val.length === 4) {
+        if (val === PIN) {
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('panelContent').style.display = 'block';
+          fetchStatus();
+          updateUI();
+        } else {
+          document.getElementById('pinError').style.display = 'block';
+          document.getElementById('pinInput').value = '';
+          setTimeout(() => document.getElementById('pinError').style.display = 'none', 2000);
+        }
+      }
+    }
+
+    async function fetchStatus() {
+      try {
+        const r = await fetch(API + '/sweep/status');
+        const d = await r.json();
+        sweepActive = d.active;
+        updateUI();
+      } catch(e) { console.log('Engine offline:', e); }
+    }
+
+    function updateUI() {
+      const badge = document.getElementById('statusBadge');
+      const toggle = document.getElementById('toggleBtn');
+      if (sweepActive) {
+        badge.className = 'badge badge-green';
+        badge.innerHTML = '&#9679; نشط';
+        toggle.className = 'btn btn-red btn-sm';
+        toggle.innerHTML = '&#10060; إيقاف';
+      } else {
+        badge.className = 'badge badge-red';
+        badge.innerHTML = '&#10060; متوقف';
+        toggle.className = 'btn btn-gold btn-sm';
+        toggle.innerHTML = '&#9654; تشغيل';
+      }
+      const nb = document.getElementById('notifyBtn');
+      nb.innerHTML = notifyActive ? '&#9679; شغال' : '&#10060; متوقف';
+      nb.className = notifyActive ? 'btn btn-gold btn-sm' : 'btn btn-sec btn-sm';
+    }
+
+    async function toggleSweep() {
+      try {
+        const r = await fetch(API + '/sweep/toggle', { method: 'POST' });
+        const d = await r.json();
+        sweepActive = d.active;
+        updateUI();
+        addLog(sweepActive ? 'التدفق التلقائي مُفعل' : 'التدفق التلقائي مُوقَف يدوياً');
+      } catch(e) { addLog('خطأ: ' + e.message); }
+    }
+
+    async function toggleNotify() {
+      try {
+        const r = await fetch(API + '/sweep/notify-toggle', { method: 'POST' });
+        const d = await r.json();
+        notifyActive = d.notify;
+        updateUI();
+        addLog('الإشعارات ' + (notifyActive ? 'مُفعّلة' : 'مُطفأة'));
+      } catch(e) { addLog('خطأ: ' + e.message); }
+    }
+
+    async function manualSweep() {
+      try {
+        const r = await fetch(API + '/sweep/run', { method: 'POST' });
+        addLog('\u{1F4B0} Sweep يدوي — تم الأمر');
+      } catch(e) { addLog('خطأ: ' + e.message); }
+    }
+
+    function addLog(text) {
+      const log = document.getElementById('logContainer');
+      const now = new Date();
+      const time = now.toLocaleDateString('ar-AE') + ' ' + now.toLocaleTimeString('ar-AE', {hour:'2-digit',minute:'2-digit'});
+      const item = document.createElement('div');
+      item.className = 'log-item';
+      item.innerHTML = `<span class="time">${time}</span><span>${text}</span>`;
+      log.insertBefore(item, log.firstChild);
+    }
+
+    // Allow Enter on PIN
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && document.getElementById('pinInput').value.length > 0) {
+        checkPin();
+      }
+    });
+  </script>
+</body>
+</html>

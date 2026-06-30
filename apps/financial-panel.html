@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ar" data-theme="pmo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMX — Financial Control Center</title>
+<link rel="stylesheet" href="../pmx-ui/css/pmx-variables.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0A1628;color:#E6E6E6;padding:20px;min-height:100vh}
+.c{max-width:1200px;margin:0 auto}
+
+/* PIN */
+.pin-o{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,22,40,0.96);display:flex;align-items:center;justify-content:center;z-index:999}
+.pin-b{background:#112240;border:1px solid #C9A84C;border-radius:16px;padding:48px 40px;text-align:center;max-width:380px;width:90%}
+.pin-b h2{color:#C9A84C;font-size:22px;margin-bottom:4px}
+.pin-b p{color:#8892B0;font-size:13px;margin-bottom:20px}
+.pin-d{display:flex;gap:12px;justify-content:center;margin-bottom:20px}
+.pin-d div{width:14px;height:14px;border-radius:50%;border:2px solid #1E3A5F;transition:.2s}
+.pin-d .f{background:#C9A84C;border-color:#C9A84C}
+.pin-e{color:#E74C3C;font-size:12px;display:none;margin-bottom:8px}
+.np{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:240px;margin:0 auto}
+.np button{background:#1E3A5F;border:none;color:#E6E6E6;font-size:22px;padding:14px;border-radius:10px;cursor:pointer}
+.np button:hover{background:#2A4A7F}
+.np .cl{background:#E74C3C}
+.np .ok{background:#27AE60;font-size:14px}
+
+/* Header */
+.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #1E3A5F}
+.hdr-l h1{color:#C9A84C;font-size:22px}
+.hdr-l .sub{color:#8892B0;font-size:11px}
+.hdr-r{display:flex;align-items:center;gap:10px}
+.bdg{display:flex;align-items:center;gap:6px;padding:5px 12px;background:#0D1B2A;border:1px solid #27AE60;border-radius:20px;color:#27AE60;font-size:11px}
+.bdg.p{border-color:#F39C12;color:#F39C12}.bdg.r{border-color:#E74C3C;color:#E74C3C}
+
+/* Stats bar */
+.sb{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:14px}
+.sb>div{background:#0A1628;border-radius:8px;padding:10px;text-align:center}
+.sb .n{font-size:20px;font-weight:700;color:#C9A84C}
+.sb .l{font-size:10px;color:#8892B0;margin-top:2px}
+.sb .n.gr{color:#27AE60}.sb .n.re{color:#E74C3C}.sb .n.bl{color:#5DADE2}
+
+/* Flow diagram */
+.fd{background:#112240;border:1px solid #1E3A5F;border-radius:10px;padding:18px;margin-bottom:14px}
+.fd-t{color:#8892B0;font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.fd-r{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.fn{background:#0A1628;border:2px solid #1E3A5F;border-radius:8px;padding:10px 14px;text-align:center;min-width:100px;transition:.3s}
+.fn.g{border-color:#C9A84C}.fn.s{border-color:#5DADE2}.fn.d{border-color:#27AE60;background:#0D2A1A}
+.fn-l{font-size:9px;color:#8892B0;margin-bottom:3px}
+.fn-v{font-size:12px;font-weight:600}
+.fn-s{font-size:9px;color:#8892B0;margin-top:2px}
+.fa{font-size:20px;color:#C9A84C}
+.fa.p{animation:pu 1.5s infinite}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* Cards */
+.gr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:800px){.gr{grid-template-columns:1fr}}
+.cd{background:#112240;border:1px solid #1E3A5F;border-radius:10px;padding:16px}
+.cd.f{grid-column:1/-1}
+.cd h3{color:#C9A84C;font-size:12px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #1E3A5F}
+.cd h3 .b{display:inline-block;padding:1px 8px;border-radius:8px;font-size:9px;margin-left:6px;font-weight:400;text-transform:none;letter-spacing:0}
+.bg{background:#0D2A1A;color:#27AE60;border:1px solid #27AE60}
+.br{background:#2A0D0D;color:#E74C3C;border:1px solid #E74C3C}
+.by{background:#1A1500;color:#C9A84C;border:1px solid #C9A84C}
+
+/* Chips */
+.ch{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 12px}
+.ch>div{display:flex;align-items:center;gap:4px;padding:5px 10px;background:#1E3A5F;border-radius:16px;font-size:11px;cursor:pointer;transition:.2s;user-select:none}
+.ch>.s{background:#C9A84C;color:#0A1628}
+.ch>.x{opacity:.35;cursor:not-allowed}
+
+/* Fields */
+.f{margin-bottom:10px}
+.f l{display:block;font-size:10px;color:#8892B0;margin-bottom:3px}
+.f input,.f select{width:100%;padding:8px 10px;background:#0A1628;border:1px solid #1E3A5F;border-radius:6px;color:#E6E6E6;font-size:12px}
+.f input:focus{outline:none;border-color:#C9A84C;box-shadow:0 0 0 2px rgba(201,168,76,0.12)}
+.f .h{font-size:9px;color:#8892B0;margin-top:2px;opacity:.5}
+.f .e{font-size:9px;color:#E74C3C;display:none;}
+.f.iv input{border-color:#E74C3C;}
+
+/* Validation bar */
+.vb{background:#0D1B2A;border:1px solid #1E3A5F;border-radius:6px;padding:10px 14px;margin-bottom:10px;display:none;font-size:12px}
+.vb.e{border-color:#E74C3C;color:#E74C3C;display:block}
+.vb.o{border-color:#27AE60;color:#27AE60;display:block}
+.vb.w{border-color:#F39C12;color:#F39C12;display:block}
+
+/* Buttons */
+.bg2{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.btn{padding:9px 18px;border:none;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:.2s}
+.btn:disabled{opacity:.35;cursor:default}
+.btn.g{background:#C9A84C;color:#0A1628}
+.btn.g:hover:not(:disabled){transform:translateY(-1px)}
+.btn.gg{background:#27AE60;color:#fff}
+.btn.r{background:#E74C3C;color:#fff}
+.btn.s{background:#1E3A5F;color:#E6E6E6}
+.btn.s:hover{background:#2A4A7F}
+
+/* Tabs */
+.tb{display:flex;gap:2px;margin-bottom:12px}
+.tb>div{padding:7px 14px;background:#0A1628;border:1px solid #1E3A5F;border-radius:6px 6px 0 0;font-size:11px;cursor:pointer;color:#8892B0}
+.tb>.a{background:#112240;color:#C9A84C;border-color:#C9A84C;border-bottom-color:#112240}
+
+/* Log */
+.lg{background:#0A1628;border-radius:6px;padding:10px;max-height:140px;overflow-y:auto;font-family:monospace;font-size:10px;line-height:1.5}
+.lg .e{display:flex;gap:6px;color:#8892B0;margin:2px 0}
+.lg .e .t{color:#5DADE2;white-space:nowrap}
+.lg .e .m{color:#E6E6E6}
+
+/* Table */
+.tbl{width:100%;border-collapse:collapse;font-size:11px}
+.tbl th{padding:6px 8px;background:#1E3A5F;color:#C9A84C;font-weight:600;text-align:right;border:1px solid #0A1628}
+.tbl td{padding:5px 8px;border:1px solid #0A1628;color:#8892B0}
+.tbl tr:nth-child(even){background:#0D1B2A}
+.tbl .in{color:#27AE60}.tbl .out{color:#F39C12}.tbl .sw{color:#5DADE2}
+
+/* Version badge */
+.vb2{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:#0D1B2A;border:1px solid #C9A84C;border-radius:4px;color:#C9A84C;font-size:10px;font-family:monospace}
+
+/* Snapshot list */
+.snap-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.snap-list>div{padding:4px 10px;background:#0A1628;border:1px solid #1E3A5F;border-radius:4px;font-size:10px;cursor:pointer;color:#8892B0}
+.snap-list>div:hover{border-color:#C9A84C;color:#C9A84C}
+</style>
+</head>
+<body>
+
+<!-- PIN -->
+<div id="pinSc" class="pin-o">
+  <div class="pin-b">
+    <h2>&#128274; Financial Control Center</h2>
+    <p>PMX — Full Financial Management</p>
+    <div class="pin-d" id="pinD"><div></div><div></div><div></div><div></div></div>
+    <div id="pinE" class="pin-e">&#9888; Wrong PIN</div>
+    <div class="np" id="np">
+      <button onclick="pk('1')">1</button><button onclick="pk('2')">2</button><button onclick="pk('3')">3</button>
+      <button onclick="pk('4')">4</button><button onclick="pk('5')">5</button><button onclick="pk('6')">6</button>
+      <button onclick="pk('7')">7</button><button onclick="pk('8')">8</button><button onclick="pk('9')">9</button>
+      <button class="cl" onclick="cp()">&#9003;</button><button onclick="pk('0')">0</button><button class="ok" onclick="sp()">&#916;</button>
+    </div>
+    <p style="color:#8892B0;font-size:10px;margin-top:12px">PIN: 2510</p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main" style="display:none">
+<div class="c">
+
+<div class="hdr">
+  <div class="hdr-l">
+    <h1>&#9881; Financial Control Center</h1>
+    <div class="sub">PMX — Full Financial Management | <span id="cfgVer" class="vb2">v1</span></div>
+  </div>
+  <div class="hdr-r">
+    <div id="sysBdg" class="bdg"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#27AE60;box-shadow:0 0 4px #27AE60"></span> Active</div>
+    <button class="btn g" onclick="runSync()" style="padding:4px 12px;font-size:10px;white-space:nowrap" id="syncBtn">&#128260; Sync</button>
+    <button class="btn s" onclick="toggleL()" style="padding:4px 10px;font-size:10px">&#127760; EN</button>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="sb">
+  <div><div class="n" id="sbBal">0.00</div><div class="l">Current Balance (AED)</div></div>
+  <div><div class="n gr" id="sbIn">0</div><div class="l">Total In</div></div>
+  <div><div class="n re" id="sbOut">0</div><div class="l">Total Out</div></div>
+  <div><div class="n bl" id="sbTxn">0</div><div class="l">Transactions</div></div>
+  <div><div class="n" id="sbSweep" style="font-size:14px">--:--</div><div class="l">Last Sweep</div></div>
+</div>
+
+<!-- Flow Diagram -->
+<div class="fd">
+  <div class="fd-t">&#128200; Cash Flow Diagram</div>
+  <div class="fd-r" id="flowRow">
+    <div class="fn g" id="nGateway"><div class="fn-l">&#127760; Gateway</div><div class="fn-v" id="fGateway">PayPal</div><div class="fn-s" id="fGatewaySub">active</div></div>
+    <div class="fa" id="a1">&#8594;</div>
+    <div class="fn s" id="nA"><div class="fn-l">&#128179; Account A</div><div class="fn-v" id="fA">Mohamed</div><div class="fn-s" id="fASub">ADCB</div></div>
+    <div class="fa" id="a2">&#8594;</div>
+    <div class="fn d" id="nB"><div class="fn-l">&#128176; Account B</div><div class="fn-v" id="fB">Fatima</div><div class="fn-s" id="fBSub">No-Fee</div></div>
+    <div><span id="flowBdg" style="padding:3px 10px;border-radius:10px;font-size:10px;background:#0D2A1A;color:#27AE60;border:1px solid #27AE60">&#9679; Active</span></div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tb">
+  <div class="a" onclick="setTab('actions',this)">&#9881; Actions</div>
+  <div onclick="setTab('transactions',this)">&#128214; Ledger</div>
+  <div onclick="setTab('snapshots',this)">&#128190; Snapshots</div>
+  <div onclick="setTab('report',this)">&#128202; Report</div>
+</div>
+
+<!-- TAB: ACTIONS -->
+<div id="tabActions">
+<div class="gr">
+  <div class="cd f">
+    <h3>&#9881; Actions</h3>
+    <div class="vb" id="vb"></div>
+    <l style="font-size:10px;color:#8892B0">Select actions:</l>
+    <div class="ch" id="chips"></div>
+    <div id="forms"></div>
+    <div class="bg2">
+      <button class="btn g" id="btnGo" onclick="exec()">&#9889; Execute</button>
+      <button class="btn s" onclick="resetA()">&#8634; Reset</button>
+    </div>
+  </div>
+
+  <div class="cd">
+    <h3>&#128203; Gateways</h3>
+    <div class="f"><l>PayPal Email</l><input id="cfgPpEmail" onchange="stageGateway()"></div>
+    <div class="f"><l>PayPal Client ID</l><input id="cfgPpCid" onchange="stageGateway()"></div>
+    <div class="f"><l>PayPal Secret</l><input id="cfgPpSec" type="password" onchange="stageGateway()"></div>
+    <div class="f"><l>Stripe Secret Key</l><input id="cfgStrSec" type="password" onchange="stageGateway()"></div>
+    <button class="btn gg" onclick="saveGateway()" style="width:100%;margin-top:4px;font-size:11px">&#128190; Save Gateways</button>
+  </div>
+
+  <div class="cd">
+    <h3>&#128203; Accounts</h3>
+    <div class="f"><l>Account A — Label</l><input id="cfgALabel" onchange="stageAcc()"></div>
+    <div class="f"><l>Account A — IBAN</l><input id="cfgAIban" onchange="stageAcc()" style="font-family:monospace;font-size:11px"></div>
+    <div class="f"><l>Account A — Bank</l><input id="cfgABank" onchange="stageAcc()"></div>
+    <hr style="border-color:#1E3A5F;margin:8px 0">
+    <div class="f"><l>Account B — Label</l><input id="cfgBLabel" onchange="stageAcc()"></div>
+    <div class="f"><l>Account B — IBAN</l><input id="cfgBIban" onchange="stageAcc()" style="font-family:monospace;font-size:11px"></div>
+    <div class="f"><l>Account B — Bank</l><input id="cfgBBank" onchange="stageAcc()"></div>
+    <button class="btn gg" onclick="saveAcc()" style="width:100%;margin-top:4px;font-size:11px">&#128190; Save Accounts</button>
+  </div>
+</div>
+</div>
+
+<!-- TAB: LEDGER -->
+<div id="tabTransactions" style="display:none">
+<div class="cd f">
+  <h3>&#128214; Transaction Ledger <span class="b bg" id="ledgerCount">0 txns</span></h3>
+  <div style="max-height:400px;overflow-y:auto">
+    <table class="tbl" id="txnTable">
+      <tr><th>Time</th><th>Type</th><th>Source</th><th>Amount</th><th>Details</th><th>ID</th></tr>
+    </table>
+  </div>
+  <button class="btn s" onclick="loadLedger()" style="margin-top:6px;font-size:10px">&#8635; Refresh</button>
+</div>
+</div>
+
+<!-- TAB: SNAPSHOTS -->
+<div id="tabSnapshots" style="display:none">
+<div class="gr">
+  <div class="cd">
+    <h3>&#128190; Save Snapshot</h3>
+    <div class="f"><l>Snapshot Name</l><input id="snapName" placeholder="e.g. before_stripe_change" style="font-family:monospace"></div>
+    <button class="btn g" onclick="saveSnap()" style="width:100%">&#128190; Save Current Config</button>
+  </div>
+  <div class="cd">
+    <h3>&#128190; Restore Snapshot</h3>
+    <div class="snap-list" id="snapList"><span style="color:#8892B0;font-size:11px">No snapshots yet</span></div>
+  </div>
+</div>
+</div>
+
+<!-- TAB: REPORT -->
+<div id="tabReport" style="display:none">
+<div class="cd f">
+  <h3>&#128202; Financial Report</h3>
+  <div style="display:flex;gap:8px;margin-bottom:10px">
+    <button class="btn s" onclick="loadReport(1)">Today</button>
+    <button class="btn s" onclick="loadReport(7)">7 Days</button>
+    <button class="btn s" onclick="loadReport(30)">30 Days</button>
+  </div>
+  <div id="reportContent" style="color:#8892B0;font-size:12px">Click a period to load report</div>
+</div>
+</div>
+
+<div style="text-align:center;margin-top:10px">
+  <a href="index.html" style="color:#8892B0;font-size:11px;text-decoration:none">&#8592; Apps</a> &middot;
+  <a href="sweep-panel.html" style="color:#8892B0;font-size:11px;text-decoration:none">&#8592; Sweep</a>
+</div>
+<p style="text-align:center;font-size:9px;color:#8892B0;margin-top:12px">PMX Financial Control Center v2.0 &middot; All operations internal &middot; AES-256</p>
+
+</div></div>
+
+<!-- ====== LOG BAR (floating) ====== -->
+<div style="position:fixed;bottom:0;left:0;right:0;background:#0A1628;border-top:1px solid #1E3A5F;padding:6px 16px;z-index:50">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div class="lg" id="logBox" style="max-height:50px;flex:1;margin-right:10px">
+      <div class="e"><span class="t">--:--</span><span class="m">System ready</span></div>
+    </div>
+    <button class="btn s" onclick="testWebhooks()" style="padding:4px 12px;font-size:10px;white-space:nowrap">&#128274; Test Webhooks</button>
+  </div>
+</div>
+
+<script>
+// ====== STATE ======
+const PIN = '2510';
+let pv = '', L = 'ar', cfg = null, ledger = null;
+
+// ====== PIN ======
+function pk(k) { if (pv.length >= 4) return; pv += k; updP(); if (pv.length == 4) setTimeout(sp, 150); }
+function cp() { pv = ''; updP(); pinE(false); }
+function updP() { document.querySelectorAll('#pinD div').forEach((d, i) => d.className = i < pv.length ? 'f' : ''); }
+function pinE(s) { document.getElementById('pinE').style.display = s ? 'block' : 'none'; }
+function sp() { if (pv === PIN) { document.getElementById('pinSc').style.display = 'none'; document.getElementById('main').style.display = 'block'; init(); } else { pinE(true); pv = ''; updP(); setTimeout(() => pinE(false), 2000); } }
+document.addEventListener('keydown', e => {
+  if (document.getElementById('pinSc').style.display !== 'none') {
+    if (e.key >= '0' && e.key <= '9') pk(e.key);
+    if (e.key === 'Backspace') cp();
+    if (e.key === 'Enter') sp();
+  }
+});
+
+// ====== INIT ======
+async function init() {
+  await loadConfig();
+  renderChips();
+  loadLedger();
+  loadSnapshots();
+  addLog('System', 'Financial Control Center initialized');
+  // Auto-refresh
+  setInterval(loadConfig, 60000);
+}
+
+// ====== CONFIG ======
+async function loadConfig() {
+  try {
+    const r = await fetch('http://localhost:3456/finance/config');
+    cfg = await r.json();
+    updateUI();
+    addLog('Engine', 'Config loaded (v' + cfg.version + ')');
+  } catch(e) {
+    addLog('Engine', 'Offline — using local state');
+    cfg = cfg || { gateway: { paypal: { email: 'topsecretawe@gmail.com', active: true }, stripe: { active: false } }, accounts: { source: { label: 'Mohamed', iban: 'AE490030013258812810001', bank: 'ADCB' }, destination: { label: 'Fatima', iban: 'AE750240009523186299701', bank: 'No-Fee' } }, sweep: { active: true, frequency: 'auto', min_balance: 100 }, version: 0 };
+    updateUI();
+  }
+}
+
+function updateUI() {
+  if (!cfg) return;
+  document.getElementById('cfgVer').textContent = 'v' + (cfg.version || 0);
+
+  // Gateway fields
+  document.getElementById('cfgPpEmail').value = cfg.gateway?.paypal?.email || '';
+  document.getElementById('cfgPpCid').value = cfg.gateway?.paypal?.client_id || '';
+  document.getElementById('cfgPpSec').value = cfg.gateway?.paypal?.secret || '';
+  document.getElementById('cfgStrSec').value = cfg.gateway?.stripe?.secret_key || '';
+
+  // Account fields
+  document.getElementById('cfgALabel').value = cfg.accounts?.source?.label || '';
+  document.getElementById('cfgAIban').value = cfg.accounts?.source?.iban || '';
+  document.getElementById('cfgABank').value = cfg.accounts?.source?.bank || '';
+  document.getElementById('cfgBLabel').value = cfg.accounts?.destination?.label || '';
+  document.getElementById('cfgBIban').value = cfg.accounts?.destination?.iban || '';
+  document.getElementById('cfgBBank').value = cfg.accounts?.destination?.bank || '';
+
+  // Flow diagram
+  const gws = [];
+  if (cfg.gateway?.paypal?.active) gws.push('PayPal');
+  if (cfg.gateway?.stripe?.active) gws.push('Stripe');
+  document.getElementById('fGateway').textContent = gws.join(' + ') || '—';
+  document.getElementById('fGatewaySub').textContent = cfg.gateway?.paypal?.email || (cfg.gateway?.stripe?.active ? 'Stripe' : 'inactive');
+  document.getElementById('fA').textContent = cfg.accounts?.source?.label || 'A';
+  document.getElementById('fASub').textContent = cfg.accounts?.source?.bank + ' ' + (cfg.accounts?.source?.iban || '').slice(0, 8) + '...';
+  document.getElementById('fB').textContent = cfg.accounts?.destination?.label || 'B';
+  document.getElementById('fBSub').textContent = cfg.accounts?.destination?.bank || '';
+
+  const a1 = document.getElementById('a1'), a2 = document.getElementById('a2');
+  a1.className = 'fa' + (cfg.sweep?.active ? ' p' : '');
+  a2.className = 'fa' + (cfg.sweep?.active ? ' p' : '');
+  const bdg = document.getElementById('flowBdg');
+  const sb = document.getElementById('sysBdg');
+  if (cfg.sweep?.active) {
+    bdg.style.cssText = 'padding:3px 10px;border-radius:10px;font-size:10px;background:#0D2A1A;color:#27AE60;border:1px solid #27AE60';
+    bdg.textContent = '\u25CF Active';
+    sb.className = 'bdg';
+    sb.innerHTML = '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#27AE60;box-shadow:0 0 4px #27AE60"></span> Active';
+  } else {
+    bdg.style.cssText = 'padding:3px 10px;border-radius:10px;font-size:10px;background:#1A1500;color:#F39C12;border:1px solid #F39C12';
+    bdg.textContent = '\u23F8 Paused';
+    sb.className = 'bdg p';
+    sb.innerHTML = '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#F39C12;box-shadow:0 0 4px #F39C12"></span> Paused';
+  }
+
+  // Sync balance if available
+  loadBalance();
+}
+
+// ====== BALANCE ======
+async function loadBalance() {
+  try {
+    const r = await fetch('http://localhost:3456/finance/balance');
+    const d = await r.json();
+    document.getElementById('sbBal').textContent = d.balance?.toFixed(2) || '0.00';
+    document.getElementById('sbIn').textContent = d.totalIn?.toFixed(2) || '0';
+    document.getElementById('sbOut').textContent = d.totalOut?.toFixed(2) || '0';
+    document.getElementById('sbSweep').textContent = d.lastSweep ? new Date(d.lastSweep).toLocaleString('ar-AE', {hour:'2-digit',minute:'2-digit'}) : '--:--';
+  } catch(e) {}
+}
+
+// ====== LEDGER ======
+async function loadLedger() {
+  try {
+    const r = await fetch('http://localhost:3456/finance/transactions?limit=100');
+    ledger = await r.json();
+    const tbl = document.getElementById('txnTable');
+    tbl.innerHTML = '<tr><th>Time</th><th>Type</th><th>Source</th><th>Amount</th><th>Details</th><th>ID</th></tr>';
+    (ledger.transactions || []).forEach(t => {
+      const c = t.type === 'in' ? 'in' : t.type === 'out' ? 'out' : 'sw';
+      tbl.innerHTML += `<tr><td>${new Date(t.timestamp).toLocaleString('ar-AE')}</td><td class="${c}">${t.type}</td><td>${t.source}</td><td class="${c}">${t.amount} ${t.currency}</td><td>${t.details || ''}</td><td style="font-size:9px;font-family:monospace">${t.id}</td></tr>`;
+    });
+    document.getElementById('ledgerCount').textContent = (ledger.transactions?.length || 0) + ' txns';
+    document.getElementById('sbTxn').textContent = ledger.total || 0;
+    loadBalance();
+  } catch(e) { addLog('Engine', 'Ledger unavailable'); }
+}
+
+// ====== SAVE GATEWAYS ======
+function stageGateway() {}
+async function saveGateway() {
+  const body = { gateway: { paypal: { email: document.getElementById('cfgPpEmail').value, client_id: document.getElementById('cfgPpCid').value, secret: document.getElementById('cfgPpSec').value, active: true } } };
+  if (document.getElementById('cfgStrSec').value) body.gateway.stripe = { secret_key: document.getElementById('cfgStrSec').value, active: true };
+  try {
+    await fetch('http://localhost:3456/finance/config', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    addLog('Config', 'Gateways updated');
+    await loadConfig();
+  } catch(e) { addLog('Error', 'Failed to save gateways'); }
+}
+
+// ====== SAVE ACCOUNTS ======
+function stageAcc() {}
+async function saveAcc() {
+  const body = { accounts: { source: { label: document.getElementById('cfgALabel').value, iban: document.getElementById('cfgAIban').value, bank: document.getElementById('cfgABank').value }, destination: { label: document.getElementById('cfgBLabel').value, iban: document.getElementById('cfgBIban').value, bank: document.getElementById('cfgBBank').value } } };
+  try {
+    await fetch('http://localhost:3456/finance/config', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) });
+    addLog('Config', 'Accounts updated');
+    await loadConfig();
+  } catch(e) { addLog('Error', 'Failed to save accounts'); }
+}
+
+// ====== ACTIONS ======
+const ADS = {
+  change_paypal: { ar:'تغيير PayPal', en:'Change PayPal', grp:'gw', icon:'\u{1F4B1}', cf:['remove_paypal'], rq:[], forms:[{id:'pp_email',ar:'New PayPal Email',en:'New PayPal Email',type:'email',ph:'email@example.com'},{id:'pp_cid',ar:'Client ID',en:'Client ID',type:'text'},{id:'pp_sec',ar:'Secret',en:'Secret',type:'password'}] },
+  add_stripe: { ar:'إضافة Stripe', en:'Add Stripe', grp:'gw', icon:'\u{1F4B3}', cf:[], rq:[], forms:[{id:'str_sec',ar:'Stripe Secret Key',en:'Stripe Secret Key',type:'password'}] },
+  remove_paypal: { ar:'إزالة PayPal', en:'Remove PayPal', grp:'gw', icon:'\u{274C}', cf:['change_paypal'], rq:['add_stripe'], forms:[] },
+  change_a: { ar:'تغيير Account A', en:'Change Account A', grp:'ac', icon:'\u{1F3E6}', cf:[], rq:[], forms:[{id:'a_lbl',ar:'الاسم',en:'Label',type:'text',ph:'Mohamed'},{id:'a_ib',ar:'IBAN',en:'IBAN',type:'text',ph:'AE...'},{id:'a_bk',ar:'البنك',en:'Bank',type:'text'}] },
+  change_b: { ar:'تغيير Account B', en:'Change Account B', grp:'ac', icon:'\u{1F3E6}', cf:[], rq:[], forms:[{id:'b_lbl',ar:'الاسم',en:'Label',type:'text',ph:'Fatima'},{id:'b_ib',ar:'IBAN',en:'IBAN',type:'text',ph:'AE...'},{id:'b_bk',ar:'البنك',en:'Bank',type:'text'}] },
+  swap: { ar:'تبديل A و B', en:'Swap A & B', grp:'fl', icon:'\u{1F501}', cf:['change_a','change_b'], rq:[], forms:[] },
+  pause: { ar:'إيقاف السحب', en:'Pause Sweep', grp:'fl', icon:'\u{23F8}\u{FE0F}', cf:['resume'], rq:[], forms:[] },
+  resume: { ar:'تشغيل السحب', en:'Resume Sweep', grp:'fl', icon:'\u{25B6}\u{FE0F}', cf:['pause'], rq:[], forms:[] },
+  freq: { ar:'تغيير الوتيرة', en:'Change Frequency', grp:'fl', icon:'\u{1F504}', cf:['pause','resume'], rq:[], forms:[{id:'frq',ar:'الوتيرة',en:'Frequency',type:'select',opts:[{v:'auto',ar:'تلقائي',en:'Auto'},{v:'daily',ar:'يومي',en:'Daily'},{v:'weekly',ar:'أسبوعي',en:'Weekly'},{v:'manual',ar:'يدوي',en:'Manual'}]},{id:'min',ar:'الحد الأدنى (AED)',en:'Min Balance (AED)',type:'number',ph:'100'}] },
+  scenario_fatima: { ar:'سيناريو فاطمة (PayPal مباشر)', en:'Scenario: Fatima Direct', grp:'sc', icon:'\u{1F91D}', cf:[], rq:[], forms:[{id:'fat_email',ar:'PayPal فاطمة',en:"Fatima's PayPal",type:'email',ph:'fatima@pmxs.space'}] },
+  reset: { ar:'إعادة ضبط', en:'Reset All', grp:'sys', icon:'\u{1F6D1}', cf:[], rq:[], forms:[], warn:true }
+};
+const ORDER = ['change_paypal','add_stripe','remove_paypal','change_a','change_b','swap','pause','resume','freq','scenario_fatima','reset'];
+let SEL = [];
+
+function renderChips() {
+  const c = document.getElementById('chips'); c.innerHTML = '';
+  ORDER.forEach(id => {
+    const d = ADS[id]; const div = document.createElement('div');
+    div.dataset.id = id; div.innerHTML = d.icon + ' ' + (L === 'ar' ? d.ar : d.en);
+    div.onclick = () => toggleChip(id); c.appendChild(div);
+  });
+}
+
+function toggleChip(id) {
+  if (id === 'reset') { SEL = ['reset']; updateChips(); renderForms(); validate(); return; }
+  if (SEL.includes('reset') && id !== 'reset') SEL = SEL.filter(x => x !== 'reset');
+  if (SEL.includes(id)) SEL = SEL.filter(x => x !== id); else SEL.push(id);
+  updateChips(); renderForms(); validate();
+}
+
+function updateChips() {
+  document.querySelectorAll('#chips > div').forEach(el => {
+    el.className = SEL.includes(el.dataset.id) ? 's' : '';
+  });
+}
+
+function renderForms() {
+  const f = document.getElementById('forms'); f.innerHTML = '';
+  let has = false;
+  SEL.forEach(id => {
+    const d = ADS[id]; if (!d.forms || !d.forms.length) return; has = true;
+    const g = document.createElement('div');
+    g.style.cssText = 'border:1px solid #1E3A5F;border-radius:6px;padding:12px;margin-bottom:8px';
+    g.innerHTML = '<div style="font-size:11px;color:#C9A84C;margin-bottom:8px">' + d.icon + ' ' + (L === 'ar' ? d.ar : d.en) + '</div>';
+    d.forms.forEach(fd => {
+      const ff = document.createElement('div'); ff.className = 'f';
+      const ll = document.createElement('l'); ll.textContent = L === 'ar' ? fd.ar : fd.en; ff.appendChild(ll);
+      if (fd.type === 'select') {
+        const s = document.createElement('select'); s.id = fd.id;
+        (fd.opts || []).forEach(o => { const opt = document.createElement('option'); opt.value = o.v; opt.textContent = L === 'ar' ? o.ar : o.en; s.appendChild(opt); });
+        s.onchange = validate; ff.appendChild(s);
+      } else {
+        const inp = document.createElement('input'); inp.type = fd.type; inp.id = fd.id; inp.placeholder = fd.ph || '';
+        inp.oninput = function() { if (fd.id.includes('ib')) this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g,''); validate(); };
+        ff.appendChild(inp);
+      }
+      g.appendChild(ff);
+    });
+    f.appendChild(g);
+  });
+  f.style.display = has ? 'block' : 'none';
+}
+
+function validate() {
+  const vb = document.getElementById('vb'); const btn = document.getElementById('btnGo');
+  if (!SEL.length) { vb.className = 'vb w'; vb.innerHTML = L === 'ar' ? '&#9888; اختر إجراء' : '&#9888; Select an action'; btn.disabled = true; return false; }
+  for (const id of SEL) {
+    const d = ADS[id];
+    if (d.cf) for (const c of d.cf) { if (SEL.includes(c)) { vb.className = 'vb e'; vb.innerHTML = (L === 'ar' ? '&#9888; لا يمكن اختيار "'+d.ar+'" مع "'+ADS[c].ar+'"' : '&#9888; Cannot combine "'+d.en+'" with "'+ADS[c].en+'"'); btn.disabled = true; return false; } }
+    if (d.rq) for (const r of d.rq) { if (!SEL.includes(r)) { vb.className = 'vb e'; vb.innerHTML = (L === 'ar' ? '&#9888; "'+d.ar+'" يتطلب "'+ADS[r].ar+'" أولاً' : '&#9888; "'+d.en+'" requires "'+ADS[r].en+'" first'); btn.disabled = true; return false; } }
+  }
+  // Form validation
+  let ok = true;
+  document.querySelectorAll('#forms input[required],#forms select[required]').forEach(el => { if (!el.value.trim()) ok = false; });
+  vb.className = 'vb o'; vb.innerHTML = (L === 'ar' ? '&#9989; '+SEL.length+' إجراءات — جاهز' : '&#9989; '+SEL.length+' actions ready');
+  btn.disabled = !ok; return ok;
+}
+
+async function exec() {
+  if (!validate()) return;
+  if (SEL.includes('reset') && !confirm(L === 'ar' ? 'إعادة تعيين كل الإعدادات؟' : 'Reset all settings?')) return;
+
+  const btn = document.getElementById('btnGo'); btn.disabled = true; btn.textContent = '⏳...';
+
+  for (const id of SEL) {
+    switch (id) {
+      case 'change_paypal': {
+        const email = document.getElementById('pp_email')?.value;
+        const cid = document.getElementById('pp_cid')?.value;
+        const sec = document.getElementById('pp_sec')?.value;
+        const body = { gateway: { paypal: { email, client_id: cid, secret: sec, active: true } } };
+        await fetch('http://localhost:3456/finance/config', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+        addLog('Action', 'PayPal updated → ' + email); break;
+      }
+      case 'add_stripe': {
+        const sec = document.getElementById('str_sec')?.value;
+        await fetch('http://localhost:3456/finance/config', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ gateway: { stripe: { secret_key: sec, active: true } } }) });
+        addLog('Action', 'Stripe added'); break;
+      }
+      case 'remove_paypal': {
+        await fetch('http://localhost:3456/finance/config', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ gateway: { paypal: { active: false } } }) });
+        addLog('Action', 'PayPal removed'); break;
+      }
+      case 'change_a': {
+        await fetch('http://localhost:3456/finance/config', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ accounts: { source: { label: document.getElementById('a_lbl')?.value, iban: document.getElementById('a_ib')?.value, bank: document.getElementById('a_bk')?.value } } }) });
+        addLog('Action', 'Account A changed'); break;
+      }
+      case 'change_b': {
+        await fetch('http://localhost:3456/finance/config', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ accounts: { destination: { label: document.getElementById('b_lbl')?.value, iban: document.getElementById('b_ib')?.value, bank: document.getElementById('b_bk')?.value } } }) });
+        addLog('Action', 'Account B changed'); break;
+      }
+      case 'swap': {
+        const r = await fetch('http://localhost:3456/finance/config'); const c = await r.json();
+        const tmp = c.accounts.source; c.accounts.source = c.accounts.destination; c.accounts.destination = tmp;
+        await fetch('http://localhost:3456/finance/config', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ accounts: c.accounts }) });
+        addLog('Action', 'Accounts swapped'); break;
+      }
+      case 'pause': {
+        await fetch('http://localhost:3456/sweep/toggle', { method:'POST' });
+        addLog('Action', 'Sweep paused'); break;
+      }
+      case 'resume': {
+        await fetch('http://localhost:3456/sweep/toggle', { method:'POST' });
+        addLog('Action', 'Sweep resumed'); break;
+      }
+      case 'freq': {
+        const frq = document.getElementById('frq')?.value; const min = document.getElementById('min')?.value;
+        await fetch('http://localhost:3456/finance/config', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ sweep: { frequency: frq || 'auto', min_balance: parseInt(min) || 100 } }) });
+        addLog('Action', 'Frequency: ' + frq + ', Min: ' + min); break;
+      }
+      case 'scenario_fatima': {
+        await fetch('http://localhost:3456/sweep/scenario', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ scenarioId: 'fatima_paypal' }) });
+        addLog('Action', 'Scenario: Fatima PayPal direct'); break;
+      }
+      case 'reset': {
+        await fetch('http://localhost:3456/finance/config', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ gateway: { paypal: { active: true, email: 'topsecretawe@gmail.com' }, stripe: { active: false } }, accounts: { source: { label:'Mohamed', iban:'AE490030013258812810001', bank:'ADCB' }, destination: { label:'Fatima', iban:'AE750240009523186299701', bank:'No-Fee' } }, sweep: { active: true, frequency: 'auto', min_balance: 100 } }) });
+        addLog('Action', 'All settings reset to default'); break;
+      }
+    }
+  }
+
+  await loadConfig(); loadLedger();
+  SEL = []; updateChips(); renderForms();
+  document.getElementById('vb').className = 'vb o';
+  document.getElementById('vb').innerHTML = L === 'ar' ? '&#9989; تم التنفيذ' : '&#9989; Executed';
+  btn.disabled = false; btn.textContent = '\u26A1 Execute';
+}
+
+// ====== SNAPSHOTS ======
+async function saveSnap() {
+  const name = document.getElementById('snapName').value || 'snap-' + Date.now();
+  await fetch('http://localhost:3456/finance/snapshot', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name }) });
+  addLog('Snapshot', 'Saved: ' + name);
+  loadSnapshots();
+}
+async function loadSnapshots() {
+  try {
+    const r = await fetch('http://localhost:3456/finance/snapshots');
+    const snaps = await r.json();
+    const el = document.getElementById('snapList');
+    if (!snaps.length) { el.innerHTML = '<span style="color:#8892B0;font-size:11px">No snapshots</span>'; return; }
+    el.innerHTML = '';
+    snaps.forEach(s => {
+      const d = document.createElement('div');
+      d.textContent = s.name + ' (v' + s.config.version + ')';
+      d.onclick = async () => {
+        if (confirm(L === 'ar' ? 'Restore snapshot "' + s.name + '"?' : 'Restore "' + s.name + '"?')) {
+          await fetch('http://localhost:3456/finance/snapshot/restore', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ name: s.name }) });
+          addLog('Snapshot', 'Restored: ' + s.name);
+          await loadConfig();
+        }
+      };
+      el.appendChild(d);
+    });
+  } catch(e) {}
+}
+
+// ====== REPORT ======
+async function loadReport(days) {
+  try {
+    const r = await fetch('http://localhost:3456/finance/report?days=' + days);
+    const d = await r.json();
+    const el = document.getElementById('reportContent');
+    let html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
+    html += '<div style="background:#0A1628;padding:10px;border-radius:6px"><b style="color:#C9A84C">Period</b><br>' + d.period + '</div>';
+    html += '<div style="background:#0A1628;padding:10px;border-radius:6px"><b style="color:#C9A84C">Transactions</b><br>' + d.transactions + '</div>';
+    html += '<div style="background:#0A1628;padding:10px;border-radius:6px"><b style="color:#27AE60">Total In</b><br>' + (d.byType?.in?.toFixed(2) || '0.00') + ' AED</div>';
+    html += '<div style="background:#0A1628;padding:10px;border-radius:6px"><b style="color:#E74C3C">Total Out</b><br>' + (d.byType?.out?.toFixed(2) || '0.00') + ' AED</div>';
+    html += '<div style="background:#0A1628;padding:10px;border-radius:6px;grid-column:1/-1"><b style="color:#C9A84C">Current Balance</b><br><span style="font-size:20px;font-weight:700;color:#E6E6E6">' + d.currentBalance?.toFixed(2) + ' AED</span></div>';
+    html += '</div>';
+    el.innerHTML = html;
+  } catch(e) { document.getElementById('reportContent').textContent = 'Error loading report'; }
+}
+
+// ====== WEBHOOK TEST ======
+async function testWebhooks() {
+  try {
+    const r = await fetch('http://localhost:3456/finance/webhook/test', { method:'POST' });
+    const d = await r.json();
+    (d.results || []).forEach(res => {
+      addLog('Webhook', res.channel + ': ' + (res.ok ? '\u2705' : '\u274C' + (res.error || '')));
+    });
+  } catch(e) { addLog('Webhook', 'Test failed: ' + e.message); }
+}
+
+// ====== TABS ======
+function setTab(name, el) {
+  document.querySelectorAll('.tb > div').forEach(t => t.className = '');
+  el.className = 'a';
+  ['actions','transactions','snapshots','report'].forEach(t => {
+    document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1)).style.display = t === name ? 'block' : 'none';
+  });
+  if (name === 'transactions') loadLedger();
+  if (name === 'snapshots') loadSnapshots();
+}
+
+// ====== SMART SYNC ======
+async function runSync() {
+  const btn = document.getElementById('syncBtn');
+  btn.disabled = true; btn.textContent = '\u23F3 Syncing...';
+  try {
+    const r = await fetch('http://localhost:3456/sync/run', { method: 'POST' });
+    const d = await r.json();
+    const msg = L === 'ar'
+      ? '\u2705 Sync: ' + d.matched + ' \u062A\u0637\u0627\u0628\u0642\u060C ' + d.updated.workbook + ' \u0648\u0648\u0631\u0643\u0628\u0648\u0643\u060C ' + d.updated.system + ' \u0646\u0638\u0627\u0645\u060C ' + d.conflicts + ' \u062A\u0636\u0627\u0631\u0628'
+      : '\u2705 Sync: ' + d.matched + ' matched, ' + d.updated.workbook + ' workbook, ' + d.updated.system + ' system, ' + d.conflicts + ' conflicts';
+    addLog('Sync', msg);
+    loadConfig();
+  } catch (e) {
+    addLog('Sync', L === 'ar' ? '\u26A0 \u0641\u0634\u0644: ' + e.message : '\u26A0 Failed: ' + e.message);
+  }
+  btn.disabled = false; btn.textContent = '\uD83D\uDD04 Sync';
+}
+
+// ====== LANGUAGE ======
+function toggleL() {
+  L = L === 'ar' ? 'en' : 'ar';
+  renderChips(); renderForms(); validate();
+  document.querySelector('.tb > div').textContent = L === 'ar' ? '\u2699 Actions' : '\u2699 Actions';
+  addLog('System', 'Language: ' + (L === 'ar' ? 'EN' : 'AR'));
+}
+
+// ====== RESET ACTIONS ======
+function resetA() { SEL = []; updateChips(); renderForms(); document.getElementById('vb').className = 'vb'; document.getElementById('vb').innerHTML = ''; document.getElementById('btnGo').disabled = true; }
+
+// ====== LOG ======
+function addLog(type, msg) {
+  const box = document.getElementById('logBox');
+  const e = document.createElement('div'); e.className = 'e';
+  const t = new Date(); e.innerHTML = '<span class="t">' + t.getHours().toString().padStart(2,'0') + ':' + t.getMinutes().toString().padStart(2,'0') + '</span><span class="m">[' + type + '] ' + msg + '</span>';
+  box.insertBefore(e, box.firstChild);
+  if (box.children.length > 30) box.removeChild(box.lastChild);
+}
+</script>
+</body>
+</html>
