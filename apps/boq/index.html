@@ -14,6 +14,94 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="stylesheet" href="../../pmx-ui/css/pmx-variables.css">
   <link rel="stylesheet" href="../../pmx-ui/css/pmx-components.css">
+  <style>
+    .boq-upload-zone {
+      border: 2px dashed #1E3A5F;
+      border-radius: 12px;
+      padding: 36px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #112240;
+      margin-bottom: 24px;
+    }
+    .boq-upload-zone:hover {
+      border-color: #C9A84C;
+      background: rgba(201, 168, 76, 0.05);
+    }
+    .boq-upload-zone p {
+      color: #E6E6E6;
+      margin: 12px 0 4px;
+      font-size: 15px;
+    }
+    .boq-upload-hint {
+      color: #8892B0;
+      font-size: 12px;
+    }
+    .boq-summary-bar {
+      background: linear-gradient(135deg, #0A1628, #112240);
+      border: 1px solid #1E3A5F;
+      border-radius: 8px;
+      padding: 12px 20px;
+      display: flex;
+      gap: 32px;
+      margin-bottom: 16px;
+      color: #E6E6E6;
+      font-size: 14px;
+    }
+    .boq-summary-bar strong {
+      color: #C9A84C;
+    }
+    .pmx-btn-danger {
+      background: #8B0000;
+      color: #fff;
+      border: none;
+      padding: 4px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .pmx-btn-danger:hover {
+      background: #a00000;
+    }
+    .pmx-btn-outline {
+      background: transparent;
+      color: #C9A84C;
+      border: 1px solid #C9A84C;
+      padding: 6px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .pmx-btn-outline:hover {
+      background: rgba(201, 168, 76, 0.1);
+    }
+    .pmx-btn-xs {
+      padding: 3px 10px;
+      font-size: 11px;
+    }
+    #boqFilter {
+      width: 300px;
+      padding: 8px 12px;
+      border: 1px solid #1E3A5F;
+      border-radius: 6px;
+      background: #112240;
+      color: #E6E6E6;
+      font-size: 13px;
+      direction: rtl;
+    }
+    #boqFilter:focus {
+      outline: none;
+      border-color: #C9A84C;
+    }
+    #boqFilter::placeholder {
+      color: #8892B0;
+    }
+    .pmx-table th {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+  </style>
   <script>if('serviceWorker' in navigator) { navigator.serviceWorker.register('../../pmx-ui/service-worker.js').catch(()=>{}); }</script>
 </head>
 <body>
@@ -51,6 +139,17 @@
         <p class="pmx-section-subtitle">Automated BOQ generation from any format — PDF, Excel, CAD</p>
       </div>
 
+      <div class="boq-upload-zone" id="boqUploadZone">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        <p>قم بإسقاط ملف Excel أو PDF هنا أو انقر للرفع</p>
+        <span class="boq-upload-hint">يدعم .xlsx, .xls, .pdf</span>
+        <input type="file" id="boqFileInput" accept=".xlsx,.xls,.pdf" hidden>
+      </div>
+
       <div class="pmx-kpi-grid">
         <div class="pmx-kpi-card">
           <div class="pmx-kpi-icon">&#128221;</div>
@@ -86,6 +185,36 @@
           </tbody>
         </table>
       </div>
+
+      <div class="pmx-table-wrapper" id="boqItemsSection" style="margin-top:24px">
+        <div class="pmx-flex pmx-flex-between pmx-mb-md">
+          <h3 style="color:var(--pmx-text);font-size:16px">جدول بنود الكميات</h3>
+          <div>
+            <button class="pmx-btn pmx-btn-outline pmx-btn-sm" onclick="BOQ.exportCSV()">تصدير CSV</button>
+            <button class="pmx-btn pmx-btn-primary pmx-btn-sm" onclick="BOQ.addItem()" style="margin-right:8px">+ إضافة بند</button>
+          </div>
+        </div>
+        <div class="boq-summary-bar">
+          <span>إجمالي الكمية: <strong id="boqTotalQty">0</strong></span>
+          <span>إجمالي القيمة: <strong id="boqTotalValue">0</strong></span>
+          <span>عدد البنود: <strong id="boqItemCount">0</strong></span>
+        </div>
+        <div style="margin-bottom:12px">
+          <input type="text" id="boqFilter" placeholder="بحث في الجدول...">
+        </div>
+        <table class="pmx-table" id="boqTable">
+          <thead><tr>
+            <th onclick="BOQ.sortBy('id')" style="cursor:pointer"># <span class="sort-indicator" data-sort="id">&#9660;</span></th>
+            <th onclick="BOQ.sortBy('description')" style="cursor:pointer">الوصف <span class="sort-indicator" data-sort="description">&#9660;</span></th>
+            <th onclick="BOQ.sortBy('unit')" style="cursor:pointer">الوحدة <span class="sort-indicator" data-sort="unit">&#9660;</span></th>
+            <th onclick="BOQ.sortBy('quantity')" style="cursor:pointer">الكمية <span class="sort-indicator" data-sort="quantity">&#9660;</span></th>
+            <th onclick="BOQ.sortBy('unitPrice')" style="cursor:pointer">سعر الوحدة <span class="sort-indicator" data-sort="unitPrice">&#9660;</span></th>
+            <th>الإجمالي</th>
+            <th>إجراءات</th>
+          </tr></thead>
+          <tbody id="boqTableBody"></tbody>
+        </table>
+      </div>
     </main>
   </div>
 
@@ -98,5 +227,197 @@
   </div>
 
   <script src="../../pmx-ui/js/pmx-components.js"></script>
+  <script>
+    const BOQ = {
+      items: [],
+      sortField: 'id',
+      sortDir: 'asc',
+
+      init() {
+        this.loadFromStorage();
+        this.setupUpload();
+        this.renderTable();
+        this.updateSummary();
+        const filterInput = document.getElementById('boqFilter');
+        if (filterInput) {
+          filterInput.addEventListener('input', () => this.renderTable());
+        }
+        if (this.items.length === 0) this.loadSampleData();
+      },
+
+      setupUpload() {
+        const zone = document.getElementById('boqUploadZone');
+        const input = document.getElementById('boqFileInput');
+        if (!zone || !input) return;
+        zone.addEventListener('click', () => input.click());
+        zone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          zone.style.borderColor = '#C9A84C';
+          zone.style.background = 'rgba(201,168,76,0.08)';
+        });
+        zone.addEventListener('dragleave', () => {
+          zone.style.borderColor = '#1E3A5F';
+          zone.style.background = '#112240';
+        });
+        zone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          zone.style.borderColor = '#1E3A5F';
+          zone.style.background = '#112240';
+          if (e.dataTransfer.files.length > 0) this.handleFile(e.dataTransfer.files[0]);
+        });
+        input.addEventListener('change', () => {
+          if (input.files.length > 0) this.handleFile(input.files[0]);
+        });
+      },
+
+      handleFile(file) {
+        this.loadSampleData();
+        PMX.showToast('تم تحميل الملف: ' + file.name, 'success');
+      },
+
+      loadSampleData() {
+        this.items = [
+          { id: 1, description: 'خرسانة مسلحة للأعمدة', unit: 'م³', quantity: 120, unitPrice: 850 },
+          { id: 2, description: 'حديد تسليح 16 مم', unit: 'طن', quantity: 15, unitPrice: 3200 },
+          { id: 3, description: 'طوب أسمنتي مصمت 20×20×40', unit: 'ألف', quantity: 50, unitPrice: 450 },
+          { id: 4, description: 'أسمنت بورتلاند عادي', unit: 'طن', quantity: 200, unitPrice: 520 },
+          { id: 5, description: 'رخام أرضيات درجة أولى', unit: 'م²', quantity: 800, unitPrice: 180 },
+          { id: 6, description: 'دهان داخلي لاتكس', unit: 'لتر', quantity: 300, unitPrice: 35 },
+          { id: 7, description: 'بلاط سيراميك حوائط', unit: 'م²', quantity: 450, unitPrice: 95 },
+          { id: 8, description: 'مواسير PVC 4 بوصة', unit: 'م', quantity: 600, unitPrice: 28 },
+          { id: 9, description: 'أسلاك كهربائية نحاس 6 مم²', unit: 'م', quantity: 2000, unitPrice: 12 },
+          { id: 10, description: 'طلاء خارجي أكريليك', unit: 'لتر', quantity: 500, unitPrice: 42 }
+        ];
+        this.saveToStorage();
+        this.renderTable();
+        this.updateSummary();
+      },
+
+      renderTable() {
+        const filter = document.getElementById('boqFilter');
+        const tbody = document.getElementById('boqTableBody');
+        if (!tbody) return;
+        const query = (filter ? filter.value : '').toLowerCase();
+
+        let filtered = this.items;
+        if (query) {
+          filtered = this.items.filter(i =>
+            i.description.toLowerCase().includes(query) ||
+            i.unit.toLowerCase().includes(query)
+          );
+        }
+
+        const sorted = [...filtered].sort((a, b) => {
+          let va = a[this.sortField], vb = b[this.sortField];
+          if (typeof va === 'string') va = va.toLowerCase();
+          if (typeof vb === 'string') vb = vb.toLowerCase();
+          if (va < vb) return this.sortDir === 'asc' ? -1 : 1;
+          if (va > vb) return this.sortDir === 'asc' ? 1 : -1;
+          return 0;
+        });
+
+        if (sorted.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--pmx-text-secondary);padding:32px">لا توجد بنود. قم برفع ملف أو إضافة بند جديد.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = sorted.map(item => {
+          const total = item.quantity * item.unitPrice;
+          return '<tr>' +
+            '<td>' + item.id + '</td>' +
+            '<td>' + item.description + '</td>' +
+            '<td>' + item.unit + '</td>' +
+            '<td>' + item.quantity.toLocaleString() + '</td>' +
+            '<td>' + PMX.formatCurrency(item.unitPrice, 'AED') + '</td>' +
+            '<td>' + PMX.formatCurrency(total, 'AED') + '</td>' +
+            '<td><button class="pmx-btn pmx-btn-danger pmx-btn-xs" onclick="BOQ.removeItem(' + item.id + ')">حذف</button></td>' +
+            '</tr>';
+        }).join('');
+      },
+
+      sortBy(field) {
+        if (this.sortField === field) {
+          this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+          this.sortField = field;
+          this.sortDir = 'asc';
+        }
+        document.querySelectorAll('.sort-indicator').forEach(el => {
+          const f = el.getAttribute('data-sort');
+          el.innerHTML = f === this.sortField ? (this.sortDir === 'asc' ? '&#9650;' : '&#9660;') : '&#9660;';
+        });
+        this.renderTable();
+      },
+
+      addItem() {
+        const id = this.items.length > 0 ? Math.max(...this.items.map(i => i.id)) + 1 : 1;
+        this.items.push({ id: id, description: 'بند جديد', unit: 'م³', quantity: 0, unitPrice: 0 });
+        this.saveToStorage();
+        this.renderTable();
+        this.updateSummary();
+        PMX.showToast('تم إضافة بند جديد', 'success');
+      },
+
+      removeItem(id) {
+        this.items = this.items.filter(i => i.id !== id);
+        this.saveToStorage();
+        this.renderTable();
+        this.updateSummary();
+        PMX.showToast('تم حذف البند', 'success');
+      },
+
+      updateSummary() {
+        const totalQty = this.items.reduce((s, i) => s + i.quantity, 0);
+        const totalValue = this.items.reduce((s, i) => s + i.quantity * i.unitPrice, 0);
+        const qtyEl = document.getElementById('boqTotalQty');
+        const valEl = document.getElementById('boqTotalValue');
+        const cntEl = document.getElementById('boqItemCount');
+        if (qtyEl) qtyEl.textContent = totalQty.toLocaleString();
+        if (valEl) valEl.textContent = PMX.formatCurrency(totalValue, 'AED');
+        if (cntEl) cntEl.textContent = this.items.length;
+        const kpiValues = document.querySelectorAll('.pmx-kpi-card .pmx-kpi-value');
+        if (kpiValues.length >= 2) {
+          kpiValues[0].textContent = this.items.length;
+          kpiValues[1].textContent = PMX.formatCurrency(totalValue, 'AED');
+        }
+      },
+
+      exportCSV() {
+        if (this.items.length === 0) {
+          PMX.showToast('لا توجد بيانات للتصدير', 'error');
+          return;
+        }
+        const headers = '#,الوصف,الوحدة,الكمية,سعر الوحدة,الإجمالي';
+        const rows = this.items.map(i => i.id + ',"' + i.description + '",' + i.unit + ',' + i.quantity + ',' + i.unitPrice + ',' + (i.quantity * i.unitPrice));
+        const csv = headers + '\n' + rows.join('\n');
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'BOQ_' + new Date().toISOString().slice(0, 10) + '.csv';
+        link.click();
+        URL.revokeObjectURL(link.href);
+        PMX.showToast('تم تصدير البيانات بنجاح', 'success');
+      },
+
+      saveToStorage() {
+        try { localStorage.setItem('pmx_boq_items', JSON.stringify(this.items)); } catch (e) {}
+      },
+
+      loadFromStorage() {
+        try {
+          const data = localStorage.getItem('pmx_boq_items');
+          if (data) {
+            const parsed = JSON.parse(data);
+            if (Array.isArray(parsed)) this.items = parsed;
+          }
+        } catch (e) {}
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+      if (typeof PMX !== 'undefined' && PMX.init) PMX.init();
+      BOQ.init();
+    });
+  </script>
 </body>
 </html>

@@ -14,6 +14,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="stylesheet" href="../../pmx-ui/css/pmx-variables.css">
   <link rel="stylesheet" href="../../pmx-ui/css/pmx-components.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.css">
   <script>if('serviceWorker' in navigator) { navigator.serviceWorker.register('../../pmx-ui/service-worker.js').catch(()=>{}); }</script>
 </head>
 <body>
@@ -59,27 +60,76 @@
         <div class="pmx-kpi-card">
           <div class="pmx-kpi-icon">&#x128202;</div>
           <div class="pmx-kpi-label">Active Projects</div>
-          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-value" id="kpi-projects">0</div>
           <div class="pmx-kpi-change positive">+ Ready</div>
         </div>
         <div class="pmx-kpi-card">
           <div class="pmx-kpi-icon">&#x9989;</div>
           <div class="pmx-kpi-label">On Track</div>
-          <div class="pmx-kpi-value">0%</div>
+          <div class="pmx-kpi-value" id="kpi-ontrack">0%</div>
           <div class="pmx-kpi-change positive">+ Cleared</div>
         </div>
         <div class="pmx-kpi-card">
           <div class="pmx-kpi-icon">&#x9888;</div>
           <div class="pmx-kpi-label">At Risk</div>
-          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-value" id="kpi-atrisk">0</div>
           <div class="pmx-kpi-change positive">+ None</div>
         </div>
       </div>
 
+      <!-- Gantt Chart -->
+      <div class="pmx-card" style="background:#112240;border:1px solid #1E3A5F;border-radius:12px;padding:24px;margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <span style="font-size:24px">&#x1F4C5;</span>
+          <h3 style="color:#E6E6E6;margin:0;font-size:18px">المخطط الزمني للمشاريع</h3>
+        </div>
+        <div id="gantt-container" style="background:#0A1628;border-radius:8px;padding:16px;border:1px solid #1E3A5F;overflow-x:auto;min-height:320px">
+          <svg id="gantt-chart" style="width:100%;min-height:300px"></svg>
+          <div id="gantt-placeholder" style="text-align:center;padding:60px 20px;color:#8892B0;font-size:14px">
+            جاري تحميل المخطط الزمني...
+          </div>
+        </div>
+      </div>
+
+      <!-- Project Cards -->
+      <div style="margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <span style="font-size:24px">&#x1F3D7;&#xFE0F;</span>
+          <h3 style="color:#E6E6E6;margin:0;font-size:18px">بطاقات المشاريع</h3>
+        </div>
+        <div id="project-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Resource Allocation -->
+      <div class="pmx-card" style="background:#112240;border:1px solid #1E3A5F;border-radius:12px;padding:24px;margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <span style="font-size:24px">&#x1F91D;</span>
+          <h3 style="color:#E6E6E6;margin:0;font-size:18px">توزيع الموارد</h3>
+        </div>
+        <div id="resource-allocation" style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:13px">
+            <thead>
+              <tr style="border-bottom:2px solid #1E3A5F">
+                <th style="padding:12px 14px;text-align:right;color:#8892B0;font-weight:500">عضو الفريق</th>
+                <th style="padding:12px 14px;text-align:right;color:#8892B0;font-weight:500">المشاريع المسندة</th>
+                <th style="padding:12px 14px;text-align:center;color:#8892B0;font-weight:500">عبء العمل</th>
+                <th style="padding:12px 14px;text-align:center;color:#8892B0;font-weight:500">الحالة</th>
+              </tr>
+            </thead>
+            <tbody id="resource-tbody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MILESTONE LIST (inside project cards area) -->
       <div class="pmx-table-wrapper">
         <div class="pmx-flex pmx-flex-between pmx-mb-md">
           <h3 style="color:var(--pmx-text);font-size:16px">PILOT Project</h3>
-          <button class="pmx-btn pmx-btn-primary pmx-btn-sm">+ New Project</button>
+          <button class="pmx-btn pmx-btn-primary pmx-btn-sm" id="btn-add-project">+ New Project</button>
         </div>
         <table class="pmx-table">
           <thead><tr>
@@ -89,7 +139,7 @@
             <th>Status</th>
             <th>Deadline</th>
           </tr></thead>
-          <tbody>
+          <tbody id="pilot-tbody">
             <tr><td colspan="5" style="text-align:center;color:var(--pmx-text-secondary);padding:32px">No projects yet. Add your first project to start tracking.</td></tr>
           </tbody>
         </table>
@@ -105,6 +155,312 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/frappe-gantt@0.6.1/dist/frappe-gantt.min.js"></script>
   <script src="../../pmx-ui/js/pmx-components.js"></script>
+  <script>
+    (function() {
+      'use strict';
+
+      function formatCurrency(v) {
+        if (typeof PMX !== 'undefined' && PMX.formatCurrency) return PMX.formatCurrency(v);
+        return 'AED ' + Number(v).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      }
+
+      function todayStr(daysOffset) {
+        var d = new Date();
+        if (daysOffset) d.setDate(d.getDate() + daysOffset);
+        return d.toISOString().slice(0, 10);
+      }
+
+      function addDays(dateStr, days) {
+        var d = new Date(dateStr);
+        d.setDate(d.getDate() + days);
+        return d.toISOString().slice(0, 10);
+      }
+
+      // ====== Sample Projects ======
+      var projects = [
+        {
+          id: 1,
+          name: 'برج النخلة التجاري',
+          budget: 15000000,
+          progress: 65,
+          status: 'على المسار',
+          deadline: '2026-12-31',
+          health: 85,
+          teamCount: 24,
+          milestones: [
+            { name: 'بداية المشروع', date: '2026-01-15', completed: true },
+            { name: 'إكمال الأساسات', date: '2026-04-20', completed: true },
+            { name: 'الهيكل الخرساني', date: '2026-08-10', completed: true },
+            { name: 'التشطيبات', date: '2026-11-01', completed: false },
+            { name: 'التسليم النهائي', date: '2026-12-31', completed: false }
+          ]
+        },
+        {
+          id: 2,
+          name: 'مشروع الوادي السكني',
+          budget: 8500000,
+          progress: 30,
+          status: 'قيد التنفيذ',
+          deadline: '2027-03-15',
+          health: 60,
+          teamCount: 15,
+          milestones: [
+            { name: 'بداية المشروع', date: '2026-03-01', completed: true },
+            { name: 'الإنشاءات الأولية', date: '2026-07-01', completed: true },
+            { name: 'منتصف المشروع', date: '2026-12-01', completed: false },
+            { name: 'التسليم', date: '2027-03-15', completed: false }
+          ]
+        },
+        {
+          id: 3,
+          name: 'مجمع الظبيان الطبي',
+          budget: 22000000,
+          progress: 10,
+          status: 'متأخر',
+          deadline: '2027-06-30',
+          health: 35,
+          teamCount: 32,
+          milestones: [
+            { name: 'بداية المشروع', date: '2026-06-01', completed: true },
+            { name: 'التصاميم', date: '2026-09-01', completed: false },
+            { name: 'بداية البناء', date: '2026-10-01', completed: false },
+            { name: 'التسليم', date: '2027-06-30', completed: false }
+          ]
+        }
+      ];
+
+      // ====== Sample Resources ======
+      var resources = [
+        { name: 'أحمد المطيري', projects: 'برج النخلة, الوادي', workload: 'High', available: 'مشغول', workloadColor: '#F44336', availColor: '#F44336' },
+        { name: 'سارة القحطاني', projects: 'الظبيان الطبي', workload: 'Medium', available: 'متاح', workloadColor: '#C9A84C', availColor: '#4CAF50' },
+        { name: 'خالد الدوسري', projects: 'برج النخلة, الظبيان', workload: 'High', available: 'مشغول', workloadColor: '#F44336', availColor: '#F44336' },
+        { name: 'نورة الشمري', projects: 'الوادي السكني', workload: 'Low', available: 'متاح', workloadColor: '#4CAF50', availColor: '#4CAF50' },
+        { name: 'فهد العتيبي', projects: 'برج النخلة, الوادي, الظبيان', workload: 'High', available: 'مشغول', workloadColor: '#F44336', availColor: '#F44336' },
+        { name: 'هند الزهراني', projects: 'الظبيان الطبي', workload: 'Medium', available: 'جزئي', workloadColor: '#C9A84C', availColor: '#FFC107' }
+      ];
+
+      // ====== Gantt Tasks ======
+      function buildGanttTasks() {
+        var today = new Date();
+        return [
+          { id: 'P1-0', name: 'برج النخلة - الأساسات', start: '2026-01-15', end: '2026-04-20', progress: 100, dependencies: '' },
+          { id: 'P1-1', name: 'برج النخلة - الهيكل', start: '2026-04-21', end: '2026-08-10', progress: 100, dependencies: 'P1-0' },
+          { id: 'P1-2', name: 'برج النخلة - التشطيبات', start: '2026-08-11', end: '2026-11-01', progress: 40, dependencies: 'P1-1' },
+          { id: 'P1-3', name: 'برج النخلة - التسليم', start: '2026-11-02', end: '2026-12-31', progress: 0, dependencies: 'P1-2' },
+          { id: 'P2-0', name: 'الوادي - الأعمال الترابية', start: '2026-03-01', end: '2026-07-01', progress: 100, dependencies: '' },
+          { id: 'P2-1', name: 'الوادي - البناء', start: '2026-07-02', end: '2026-12-01', progress: 20, dependencies: 'P2-0' },
+          { id: 'P2-2', name: 'الوادي - التسليم', start: '2026-12-02', end: '2027-03-15', progress: 0, dependencies: 'P2-1' },
+          { id: 'P3-0', name: 'الظبيان - التصاميم', start: '2026-06-01', end: '2026-09-01', progress: 30, dependencies: '' },
+          { id: 'P3-1', name: 'الظبيان - البناء', start: '2026-10-01', end: '2027-03-01', progress: 0, dependencies: '' },
+          { id: 'P3-2', name: 'الظبيان - التسليم', start: '2027-03-02', end: '2027-06-30', progress: 0, dependencies: 'P3-1' }
+        ];
+      }
+
+      function initGantt() {
+        var placeholder = document.getElementById('gantt-placeholder');
+        var svgEl = document.getElementById('gantt-chart');
+
+        if (typeof Gantt === 'undefined') {
+          if (placeholder) placeholder.innerHTML = '&#x26A0;&#xFE0F; لم يتم تحميل مكتبة Frappe Gantt — تحقق من اتصال الإنترنت';
+          return;
+        }
+
+        var tasks = buildGanttTasks();
+        var gantt = new Gantt(svgEl, tasks, {
+          view_mode: 'Week',
+          date_format: 'YYYY-MM-DD',
+          bar_height: 28,
+          bar_corner_radius: 4,
+          arrow_curve: 5,
+          padding: 18,
+          today_options: { stroke: '#C9A84C', stroke_width: 2 },
+          on_date_change: function(task, start, end) {
+            PMX.showToast('تم تحديث تاريخ: ' + task.name, 'success');
+          },
+          on_progress_change: function(task, progress) {
+            PMX.showToast('تقدم: ' + task.name + ' = ' + Math.round(progress) + '%', 'success');
+          },
+          on_click: function(task) {
+            PMX.showToast('' + task.name, 'success');
+          }
+        });
+
+        // Style the gantt with dark theme
+        var style = document.createElement('style');
+        style.textContent = `
+          .gantt .bar-label { fill: #E6E6E6 !important; font-size: 11px; }
+          .gantt .bar-label.big { fill: #E6E6E6 !important; }
+          .gantt .bar-wrapper:hover .bar { fill-opacity: 0.85; }
+          .gantt .bar { fill: #C9A84C; }
+          .gantt .bar-fill { fill: #C9A84C; }
+          .gantt .bar-fill-dependency { fill: #C9A84C; }
+          .gantt .bar-fill-project { fill: #1E3A5F; }
+          .gantt .bar-wrapper .bar-progress { fill: #B8860B; }
+          .gantt .today { stroke: #C9A84C; stroke-width: 2; }
+          .gantt .grid-header { fill: #112240; stroke: #1E3A5F; }
+          .gantt .grid-row { fill: #0A1628; }
+          .gantt .grid-row:nth-child(even) { fill: #112240; }
+          .gantt .row-line { stroke: #1E3A5F; }
+          .gantt .tick { stroke: #1E3A5F; }
+          .gantt text { fill: #8892B0; font-size: 11px; }
+          .gantt .arrow { stroke: #8892B0; stroke-width: 1.5; fill: #8892B0; }
+        `;
+        document.head.appendChild(style);
+
+        if (placeholder) placeholder.style.display = 'none';
+      }
+
+      // ====== Render Project Cards ======
+      function renderProjectCards() {
+        var container = document.getElementById('project-cards');
+        var html = '';
+        projects.forEach(function(p) {
+          var healthColor = p.health >= 70 ? '#4CAF50' : p.health >= 40 ? '#C9A84C' : '#F44336';
+          var statusColor = p.status === 'على المسار' ? '#4CAF50' : p.status === 'قيد التنفيذ' ? '#C9A84C' : '#F44336';
+          var milestoneHtml = '';
+          p.milestones.forEach(function(m) {
+            var icon = m.completed ? '&#x2705;' : '&#x23F1;&#xFE0F;';
+            var mColor = m.completed ? '#4CAF50' : '#8892B0';
+            milestoneHtml += '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;color:' + mColor + ';font-size:12px">' +
+              '<span>' + icon + '</span>' +
+              '<span>' + m.name + '</span>' +
+              '<span style="margin-left:auto;color:#8892B0;font-size:11px">' + m.date + '</span>' +
+              '</div>';
+          });
+
+          html += '<div style="background:#112240;border:1px solid #1E3A5F;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center">' +
+              '<h4 style="color:#E6E6E6;margin:0;font-size:15px">' + p.name + '</h4>' +
+              '<span style="padding:4px 12px;border-radius:20px;font-size:11px;background:' + statusColor + '20;color:' + statusColor + ';font-weight:500">' + p.status + '</span>' +
+            '</div>' +
+            '<div style="display:flex;gap:16px;font-size:12px;color:#8892B0">' +
+              '<span>&#x1F465; ' + p.teamCount + ' أعضاء</span>' +
+              '<span>&#x1F4B0; ' + formatCurrency(p.budget) + '</span>' +
+              '<span style="margin-left:auto;display:flex;align-items:center;gap:4px">' +
+                '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + healthColor + '"></span>' +
+                '<span style="color:' + healthColor + ';font-weight:600">صحة ' + p.health + '%</span>' +
+              '</span>' +
+            '</div>' +
+            '<div style="display:flex;align-items:center;gap:8px">' +
+              '<span style="color:#8892B0;font-size:12px">' + p.progress + '%</span>' +
+              '<div style="flex:1;height:6px;background:#0A1628;border-radius:3px;overflow:hidden">' +
+                '<div style="height:100%;width:' + p.progress + '%;background:linear-gradient(90deg,#C9A84C,#B8860B);border-radius:3px;transition:width 0.3s"></div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="border-top:1px solid #1E3A5F;padding-top:10px">' +
+              '<div style="color:#8892B0;font-size:12px;margin-bottom:6px">&#x1F4CC; المعالم الرئيسية</div>' +
+              milestoneHtml +
+            '</div>' +
+          '</div>';
+        });
+        container.innerHTML = html;
+      }
+
+      // ====== Render Resources ======
+      function renderResources() {
+        var tbody = document.getElementById('resource-tbody');
+        var html = '';
+        resources.forEach(function(r) {
+          var workloadBar = '';
+          if (r.workload === 'High') workloadBar = '<div style="height:4px;background:#F44336;border-radius:2px;width:90%;margin:4px auto 0"></div>';
+          else if (r.workload === 'Medium') workloadBar = '<div style="height:4px;background:#C9A84C;border-radius:2px;width:55%;margin:4px auto 0"></div>';
+          else workloadBar = '<div style="height:4px;background:#4CAF50;border-radius:2px;width:25%;margin:4px auto 0"></div>';
+
+          html += '<tr style="border-bottom:1px solid #1E3A5F">' +
+            '<td style="padding:12px 14px">' +
+              '<div style="display:flex;align-items:center;gap:10px">' +
+                '<div style="width:32px;height:32px;border-radius:50%;background:#1E3A5F;display:flex;align-items:center;justify-content:center;color:#C9A84C;font-size:13px;font-weight:600">' + r.name.charAt(0) + '</div>' +
+                '<span style="color:#E6E6E6">' + r.name + '</span>' +
+              '</div>' +
+            '</td>' +
+            '<td style="padding:12px 14px;color:#8892B0;font-size:12px">' + r.projects + '</td>' +
+            '<td style="padding:12px 14px;text-align:center">' +
+              '<span style="color:' + r.workloadColor + ';font-size:13px;font-weight:500">' +
+                (r.workload === 'High' ? 'مرتفع' : r.workload === 'Medium' ? 'متوسط' : 'منخفض') +
+              '</span>' +
+              workloadBar +
+            '</td>' +
+            '<td style="padding:12px 14px;text-align:center">' +
+              '<span style="padding:4px 14px;border-radius:20px;font-size:12px;background:' + r.availColor + '20;color:' + r.availColor + '">' + r.available + '</span>' +
+            '</td>' +
+          '</tr>';
+        });
+        tbody.innerHTML = html;
+      }
+
+      // ====== Render Pilot Project Table ======
+      function renderPilotTable() {
+        var tbody = document.getElementById('pilot-tbody');
+        var html = '';
+        projects.forEach(function(p) {
+          var statusColor = p.status === 'على المسار' ? '#4CAF50' : p.status === 'قيد التنفيذ' ? '#C9A84C' : '#F44336';
+          var statusBg = p.status === 'على المسار' ? 'rgba(76,175,80,0.2)' : p.status === 'قيد التنفيذ' ? 'rgba(201,168,76,0.2)' : 'rgba(244,67,54,0.2)';
+          html += '<tr>' +
+            '<td>' + p.name + '</td>' +
+            '<td>' + formatCurrency(p.budget) + '</td>' +
+            '<td>' +
+              '<div style="display:flex;align-items:center;gap:8px">' +
+                '<div style="flex:1;max-width:100px;height:6px;background:#0A1628;border-radius:3px;overflow:hidden">' +
+                  '<div style="height:100%;width:' + p.progress + '%;background:linear-gradient(90deg,#C9A84C,#B8860B);border-radius:3px"></div>' +
+                '</div>' +
+                '<span style="color:#8892B0;font-size:12px">' + p.progress + '%</span>' +
+              '</div>' +
+            '</td>' +
+            '<td><span style="padding:4px 12px;border-radius:20px;font-size:12px;background:' + statusBg + ';color:' + statusColor + '">' + p.status + '</span></td>' +
+            '<td>' + p.deadline + '</td>' +
+          '</tr>';
+        });
+        tbody.innerHTML = html;
+      }
+
+      // ====== Update KPIs ======
+      function updateKPIs() {
+        document.getElementById('kpi-projects').textContent = projects.length;
+        var onTrackCount = projects.filter(function(p) { return p.status === 'على المسار'; }).length;
+        var atRiskCount = projects.filter(function(p) { return p.status === 'متأخر'; }).length;
+        document.getElementById('kpi-ontrack').textContent = Math.round((onTrackCount / projects.length) * 100) + '%';
+        document.getElementById('kpi-atrisk').textContent = atRiskCount;
+      }
+
+      // ====== Init ======
+      function init() {
+        renderProjectCards();
+        renderResources();
+        renderPilotTable();
+        updateKPIs();
+        initGantt();
+
+        document.getElementById('btn-add-project').addEventListener('click', function() {
+          var newProj = {
+            id: projects.length + 1,
+            name: 'مشروع جديد #' + (projects.length + 1),
+            budget: Math.round(Math.random() * 30000000 + 5000000),
+            progress: 0,
+            status: 'جديد',
+            deadline: addDays(todayStr(), 365),
+            health: Math.round(Math.random() * 40 + 30),
+            teamCount: Math.round(Math.random() * 20 + 5),
+            milestones: [
+              { name: 'بداية المشروع', date: todayStr(), completed: true },
+              { name: 'نهاية المشروع', date: addDays(todayStr(), 365), completed: false }
+            ]
+          };
+          projects.push(newProj);
+          renderProjectCards();
+          renderPilotTable();
+          updateKPIs();
+          PMX.showToast('تم إضافة مشروع جديد', 'success');
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
 </body>
 </html>

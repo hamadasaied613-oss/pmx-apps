@@ -58,27 +58,170 @@
         <div class="pmx-kpi-card">
           <div class="pmx-kpi-icon">&#x128202;</div>
           <div class="pmx-kpi-label">Studies Completed</div>
-          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-value" id="kpi-studies">0</div>
           <div class="pmx-kpi-change positive">+ Ready</div>
         </div>
         <div class="pmx-kpi-card">
           <div class="pmx-kpi-icon">&#x128176;</div>
           <div class="pmx-kpi-label">Investment Analyzed</div>
-          <div class="pmx-kpi-value">AED 0</div>
+          <div class="pmx-kpi-value" id="kpi-investment">AED 0</div>
           <div class="pmx-kpi-change positive">+ Ready</div>
         </div>
         <div class="pmx-kpi-card">
           <div class="pmx-kpi-icon">&#x127919;</div>
           <div class="pmx-kpi-label">Avg. ROI</div>
-          <div class="pmx-kpi-value">0%</div>
+          <div class="pmx-kpi-value" id="kpi-roi">0%</div>
           <div class="pmx-kpi-change positive">+ Ready</div>
         </div>
       </div>
 
+      <!-- NPV/IRR Calculator -->
+      <div class="pmx-card" style="background:#112240;border:1px solid #1E3A5F;border-radius:12px;padding:24px;margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+          <span style="font-size:24px">&#x128200;</span>
+          <h3 style="color:#E6E6E6;margin:0;font-size:18px">حاسبة NPV / IRR</h3>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+          <div>
+            <div style="margin-bottom:14px">
+              <label style="color:#8892B0;font-size:13px;display:block;margin-bottom:4px">الاستثمار الأولي (AED)</label>
+              <input type="number" id="npv-investment" value="5000000" style="width:100%;padding:10px 14px;background:#0A1628;border:1px solid #1E3A5F;border-radius:8px;color:#E6E6E6;font-size:14px;direction:ltr">
+            </div>
+            <div style="margin-bottom:14px">
+              <label style="color:#8892B0;font-size:13px;display:block;margin-bottom:4px">التدفق النقدي السنوي (AED)</label>
+              <input type="number" id="npv-cashflow" value="1200000" style="width:100%;padding:10px 14px;background:#0A1628;border:1px solid #1E3A5F;border-radius:8px;color:#E6E6E6;font-size:14px;direction:ltr">
+            </div>
+            <div style="margin-bottom:14px">
+              <label style="color:#8892B0;font-size:13px;display:block;margin-bottom:4px">معدل الخصم (%)</label>
+              <input type="number" id="npv-rate" value="10" step="0.1" style="width:100%;padding:10px 14px;background:#0A1628;border:1px solid #1E3A5F;border-radius:8px;color:#E6E6E6;font-size:14px;direction:ltr">
+            </div>
+            <div style="margin-bottom:14px">
+              <label style="color:#8892B0;font-size:13px;display:block;margin-bottom:4px">مدة المشروع (سنوات)</label>
+              <input type="number" id="npv-years" value="5" min="1" max="30" style="width:100%;padding:10px 14px;background:#0A1628;border:1px solid #1E3A5F;border-radius:8px;color:#E6E6E6;font-size:14px;direction:ltr">
+            </div>
+            <div style="margin-bottom:14px">
+              <label style="color:#8892B0;font-size:13px;display:block;margin-bottom:4px">القيمة النهائية (AED)</label>
+              <input type="number" id="npv-terminal" value="2000000" style="width:100%;padding:10px 14px;background:#0A1628;border:1px solid #1E3A5F;border-radius:8px;color:#E6E6E6;font-size:14px;direction:ltr">
+            </div>
+            <button id="btn-calc-npv" class="pmx-btn pmx-btn-primary" style="width:100%;background:#C9A84C;color:#0A1628;font-weight:700;padding:12px;border:none;border-radius:8px;cursor:pointer;font-size:15px">احسب NPV / IRR</button>
+          </div>
+          <div id="npv-results" style="background:#0A1628;border-radius:8px;padding:20px;border:1px solid #1E3A5F">
+            <div style="color:#8892B0;font-size:13px;margin-bottom:16px">نتائج التحليل المالي</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="result-item" style="background:#112240;border-radius:8px;padding:14px;text-align:center">
+                <div style="color:#8892B0;font-size:11px;margin-bottom:4px">NPV</div>
+                <div id="result-npv" style="color:#E6E6E6;font-size:20px;font-weight:700;direction:ltr">—</div>
+              </div>
+              <div class="result-item" style="background:#112240;border-radius:8px;padding:14px;text-align:center">
+                <div style="color:#8892B0;font-size:11px;margin-bottom:4px">IRR</div>
+                <div id="result-irr" style="color:#E6E6E6;font-size:20px;font-weight:700;direction:ltr">—</div>
+              </div>
+              <div class="result-item" style="background:#112240;border-radius:8px;padding:14px;text-align:center">
+                <div style="color:#8892B0;font-size:11px;margin-bottom:4px">فترة الاسترداد</div>
+                <div id="result-payback" style="color:#E6E6E6;font-size:20px;font-weight:700">—</div>
+              </div>
+              <div class="result-item" style="background:#112240;border-radius:8px;padding:14px;text-align:center">
+                <div style="color:#8892B0;font-size:11px;margin-bottom:4px">سنة التعادل</div>
+                <div id="result-breakeven" style="color:#E6E6E6;font-size:20px;font-weight:700">—</div>
+              </div>
+              <div class="result-item" style="background:#112240;border-radius:8px;padding:14px;text-align:center;grid-column:1/-1">
+                <div style="color:#8892B0;font-size:11px;margin-bottom:4px">مؤشر الربحية (PI)</div>
+                <div id="result-pi" style="color:#E6E6E6;font-size:20px;font-weight:700;direction:ltr">—</div>
+              </div>
+            </div>
+            <div id="npv-verdict" style="margin-top:16px;padding:12px;border-radius:8px;text-align:center;font-size:14px;font-weight:600;display:none"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- What-If Analysis -->
+      <div class="pmx-card" style="background:#112240;border:1px solid #1E3A5F;border-radius:12px;padding:24px;margin-bottom:24px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+          <span style="font-size:24px">&#x1F9EA;</span>
+          <h3 style="color:#E6E6E6;margin:0;font-size:18px">تحليل What-If</h3>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+          <div>
+            <div style="margin-bottom:18px">
+              <label style="color:#8892B0;font-size:13px;display:flex;justify-content:space-between;margin-bottom:6px">
+                <span>الاستثمار الأولي</span>
+                <span id="wi-invest-val" style="color:#C9A84C">AED 5,000,000</span>
+              </label>
+              <input type="range" id="wi-invest" min="100000" max="20000000" step="100000" value="5000000" style="width:100%;-webkit-appearance:none;height:6px;background:#1E3A5F;border-radius:3px;outline:none">
+              <div style="display:flex;justify-content:space-between;color:#8892B0;font-size:11px;margin-top:2px"><span>100K</span><span>20M</span></div>
+            </div>
+            <div style="margin-bottom:18px">
+              <label style="color:#8892B0;font-size:13px;display:flex;justify-content:space-between;margin-bottom:6px">
+                <span>التدفق النقدي السنوي</span>
+                <span id="wi-cf-val" style="color:#C9A84C">AED 1,200,000</span>
+              </label>
+              <input type="range" id="wi-cf" min="50000" max="5000000" step="50000" value="1200000" style="width:100%;-webkit-appearance:none;height:6px;background:#1E3A5F;border-radius:3px;outline:none">
+              <div style="display:flex;justify-content:space-between;color:#8892B0;font-size:11px;margin-top:2px"><span>50K</span><span>5M</span></div>
+            </div>
+            <div style="margin-bottom:18px">
+              <label style="color:#8892B0;font-size:13px;display:flex;justify-content:space-between;margin-bottom:6px">
+                <span>معدل الخصم</span>
+                <span id="wi-rate-val" style="color:#C9A84C">10%</span>
+              </label>
+              <input type="range" id="wi-rate" min="1" max="30" step="0.5" value="10" style="width:100%;-webkit-appearance:none;height:6px;background:#1E3A5F;border-radius:3px;outline:none">
+              <div style="display:flex;justify-content:space-between;color:#8892B0;font-size:11px;margin-top:2px"><span>1%</span><span>30%</span></div>
+            </div>
+            <div id="wi-live-results" style="background:#0A1628;border-radius:8px;padding:16px;border:1px solid #1E3A5F;margin-top:8px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="text-align:center;padding:8px;background:#112240;border-radius:6px">
+                  <div style="color:#8892B0;font-size:11px">NPV</div>
+                  <div id="wi-npv" style="color:#E6E6E6;font-size:16px;font-weight:700">—</div>
+                </div>
+                <div style="text-align:center;padding:8px;background:#112240;border-radius:6px">
+                  <div style="color:#8892B0;font-size:11px">IRR</div>
+                  <div id="wi-irr" style="color:#E6E6E6;font-size:16px;font-weight:700">—</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h4 style="color:#C9A84C;font-size:14px;margin:0 0 12px 0">سيناريوهات المقارنة</h4>
+            <div style="overflow-x:auto">
+              <table style="width:100%;border-collapse:collapse;font-size:13px">
+                <thead>
+                  <tr style="border-bottom:1px solid #1E3A5F">
+                    <th style="padding:8px 10px;text-align:right;color:#8892B0;font-weight:400">المؤشر</th>
+                    <th style="padding:8px 10px;text-align:center;color:#4CAF50;font-weight:500">متفائل</th>
+                    <th style="padding:8px 10px;text-align:center;color:#C9A84C;font-weight:500">أساسي</th>
+                    <th style="padding:8px 10px;text-align:center;color:#F44336;font-weight:500">متشائم</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid #0A1628">
+                    <td style="padding:8px 10px;color:#8892B0">الاستثمار</td>
+                    <td id="s-inv-opt" style="padding:8px 10px;text-align:center;color:#E6E6E6">—</td>
+                    <td id="s-inv-base" style="padding:8px 10px;text-align:center;color:#E6E6E6">—</td>
+                    <td id="s-inv-pess" style="padding:8px 10px;text-align:center;color:#E6E6E6">—</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #0A1628">
+                    <td style="padding:8px 10px;color:#8892B0">NPV</td>
+                    <td id="s-npv-opt" style="padding:8px 10px;text-align:center;color:#E6E6E6">—</td>
+                    <td id="s-npv-base" style="padding:8px 10px;text-align:center;color:#E6E6E6">—</td>
+                    <td id="s-npv-pess" style="padding:8px 10px;text-align:center;color:#E6E6E6">—</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid #0A1628">
+                    <td style="padding:8px 10px;color:#8892B0">IRR</td>
+                    <td id="s-irr-opt" style="padding:8px 10px;text-align:center;color:#E6E6E6">—</td>
+                    <td id="s-irr-base" style="padding:8px 10px;text-align:center;color:#E6E6E6">—</td>
+                    <td id="s-irr-pess" style="padding:8px 10px;text-align:center;color:#E6E6E6">—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Feasibility Table (enhanced) -->
       <div class="pmx-table-wrapper">
         <div class="pmx-flex pmx-flex-between pmx-mb-md">
           <h3 style="color:var(--pmx-text);font-size:16px">Recent Feasibility</h3>
-          <button class="pmx-btn pmx-btn-primary pmx-btn-sm">+ New Study</button>
+          <button class="pmx-btn pmx-btn-primary pmx-btn-sm" id="btn-add-study">+ New Study</button>
         </div>
         <table class="pmx-table">
           <thead><tr>
@@ -88,7 +231,7 @@
             <th>Status</th>
             <th>Date</th>
           </tr></thead>
-          <tbody>
+          <tbody id="studies-tbody">
             <tr><td colspan="5" style="text-align:center;color:var(--pmx-text-secondary);padding:32px">No studies yet. Start your first feasibility analysis.</td></tr>
           </tbody>
         </table>
@@ -105,5 +248,284 @@
   </div>
 
   <script src="../../pmx-ui/js/pmx-components.js"></script>
+  <script>
+    (function() {
+      'use strict';
+
+      // ====== Financial Calculations ======
+      function calcNPV(investment, annualCF, rate, years, terminal) {
+        var npv = -investment;
+        for (var t = 1; t <= years; t++) {
+          npv += annualCF / Math.pow(1 + rate / 100, t);
+        }
+        npv += terminal / Math.pow(1 + rate / 100, years);
+        return npv;
+      }
+
+      function calcIRR(investment, annualCF, years, terminal) {
+        var guess = 0.1;
+        for (var i = 0; i < 1000; i++) {
+          var npv = -investment;
+          var dnpv = 0;
+          for (var t = 1; t <= years; t++) {
+            npv += annualCF / Math.pow(1 + guess, t);
+            dnpv += -t * annualCF / Math.pow(1 + guess, t + 1);
+          }
+          npv += terminal / Math.pow(1 + guess, years);
+          dnpv += -years * terminal / Math.pow(1 + guess, years + 1);
+          var newGuess = guess - npv / dnpv;
+          if (Math.abs(newGuess - guess) < 0.0001) break;
+          guess = newGuess;
+          if (guess < -0.99 || guess > 10) return null;
+        }
+        if (guess < -0.99 || guess > 10) return null;
+        return guess * 100;
+      }
+
+      function calcPayback(investment, annualCF, terminal, years) {
+        var cumulative = -investment;
+        for (var t = 1; t <= years; t++) {
+          var cf = annualCF + (t === years ? terminal : 0);
+          cumulative += cf;
+          if (cumulative >= 0) {
+            var prevCum = cumulative - cf;
+            return t - 1 + (-prevCum / cf);
+          }
+        }
+        return null;
+      }
+
+      function calcBreakEven(investment, annualCF, terminal, years) {
+        var cumulative = -investment;
+        for (var t = 1; t <= years; t++) {
+          var cf = annualCF + (t === years ? terminal : 0);
+          cumulative += cf;
+          if (cumulative >= 0) return t;
+        }
+        return null;
+      }
+
+      function calcPI(investment, annualCF, rate, years, terminal) {
+        var pv = 0;
+        for (var t = 1; t <= years; t++) {
+          pv += annualCF / Math.pow(1 + rate / 100, t);
+        }
+        pv += terminal / Math.pow(1 + rate / 100, years);
+        return pv / investment;
+      }
+
+      function formatCurrency(v) {
+        if (typeof PMX !== 'undefined' && PMX.formatCurrency) return PMX.formatCurrency(v);
+        return 'AED ' + Number(v).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      }
+
+      function formatNumber(v) {
+        if (typeof PMX !== 'undefined' && PMX.formatNumber) return PMX.formatNumber(v);
+        return Number(v).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+      }
+
+      function formatPercent(v) {
+        return Number(v).toFixed(2) + '%';
+      }
+
+      // ====== NPV/IRR Calculator ======
+      function runNPVCalc() {
+        var investment = parseFloat(document.getElementById('npv-investment').value);
+        var annualCF = parseFloat(document.getElementById('npv-cashflow').value);
+        var rate = parseFloat(document.getElementById('npv-rate').value);
+        var years = parseInt(document.getElementById('npv-years').value);
+        var terminal = parseFloat(document.getElementById('npv-terminal').value);
+
+        if (isNaN(investment) || investment <= 0) { PMX.showToast('الرجاء إدخال استثمار أولي صحيح', 'error'); return; }
+        if (isNaN(annualCF) || annualCF <= 0) { PMX.showToast('الرجاء إدخال تدفق نقدي صحيح', 'error'); return; }
+        if (isNaN(rate) || rate <= 0) { PMX.showToast('الرجاء إدخال معدل خصم صحيح', 'error'); return; }
+        if (isNaN(years) || years < 1) { PMX.showToast('الرجاء إدخال مدة المشروع', 'error'); return; }
+
+        var npv = calcNPV(investment, annualCF, rate, years, terminal);
+        var irr = calcIRR(investment, annualCF, years, terminal);
+        var payback = calcPayback(investment, annualCF, terminal, years);
+        var breakeven = calcBreakEven(investment, annualCF, terminal, years);
+        var pi = calcPI(investment, annualCF, rate, years, terminal);
+
+        var npvEl = document.getElementById('result-npv');
+        var irrEl = document.getElementById('result-irr');
+        var paybackEl = document.getElementById('result-payback');
+        var beEl = document.getElementById('result-breakeven');
+        var piEl = document.getElementById('result-pi');
+        var verdictEl = document.getElementById('npv-verdict');
+
+        var npvColor = npv >= 0 ? '#4CAF50' : '#F44336';
+        npvEl.textContent = formatCurrency(npv);
+        npvEl.style.color = npvColor;
+
+        irrEl.textContent = irr !== null ? formatPercent(irr) : 'N/A';
+        irrEl.style.color = irr !== null && irr >= rate ? '#4CAF50' : '#F44336';
+
+        paybackEl.textContent = payback !== null ? formatNumber(payback) + ' سنة' : '> ' + years + ' سنوات';
+        beEl.textContent = breakeven !== null ? beEl.textContent = 'السنة ' + breakeven : 'N/A';
+        piEl.textContent = formatNumber(pi);
+        piEl.style.color = pi >= 1 ? '#4CAF50' : '#F44336';
+
+        verdictEl.style.display = 'block';
+        if (npv > 0) {
+          verdictEl.innerHTML = '&#x2705; المشروع مجدي مالياً — NPV موجب (' + formatCurrency(npv) + ')';
+          verdictEl.style.background = 'rgba(76,175,80,0.15)';
+          verdictEl.style.color = '#4CAF50';
+          verdictEl.style.border = '1px solid rgba(76,175,80,0.3)';
+        } else if (npv === 0) {
+          verdictEl.innerHTML = '&#x26A0;&#xFE0F; المشروع متعادل — NPV = صفر';
+          verdictEl.style.background = 'rgba(255,193,7,0.15)';
+          verdictEl.style.color = '#FFC107';
+          verdictEl.style.border = '1px solid rgba(255,193,7,0.3)';
+        } else {
+          verdictEl.innerHTML = '&#x274C; المشروع غير مجدي — NPV سالب (' + formatCurrency(npv) + ')';
+          verdictEl.style.background = 'rgba(244,67,54,0.15)';
+          verdictEl.style.color = '#F44336';
+          verdictEl.style.border = '1px solid rgba(244,67,54,0.3)';
+        }
+
+        PMX.showToast('تم حساب NPV / IRR بنجاح', 'success');
+      }
+
+      // ====== What-If Analysis ======
+      function updateWhatIf() {
+        var inv = parseInt(document.getElementById('wi-invest').value);
+        var cf = parseInt(document.getElementById('wi-cf').value);
+        var rate = parseFloat(document.getElementById('wi-rate').value);
+
+        document.getElementById('wi-invest-val').textContent = formatCurrency(inv);
+        document.getElementById('wi-cf-val').textContent = formatCurrency(cf);
+        document.getElementById('wi-rate-val').textContent = rate + '%';
+
+        var npv = calcNPV(inv, cf, rate, 5, inv * 0.4);
+        var irr = calcIRR(inv, cf, 5, inv * 0.4);
+
+        var npvEl = document.getElementById('wi-npv');
+        npvEl.textContent = formatCurrency(npv);
+        npvEl.style.color = npv >= 0 ? '#4CAF50' : '#F44336';
+
+        document.getElementById('wi-irr').textContent = irr !== null ? formatPercent(irr) : 'N/A';
+
+        // Scenario table
+        var optimisticInvest = inv * 0.85;
+        var baseInvest = inv;
+        var pessimisticInvest = inv * 1.25;
+        var optimisticCF = cf * 1.2;
+        var baseCF = cf;
+        var pessimisticCF = cf * 0.7;
+        var optRate = rate * 0.8;
+        var baseRate = rate;
+        var pessRate = rate * 1.3;
+
+        var npvOpt = calcNPV(optimisticInvest, optimisticCF, optRate, 5, optimisticInvest * 0.5);
+        var npvBase = calcNPV(baseInvest, baseCF, baseRate, 5, baseInvest * 0.4);
+        var npvPess = calcNPV(pessimisticInvest, pessimisticCF, pessRate, 5, pessimisticInvest * 0.3);
+        var irrOpt = calcIRR(optimisticInvest, optimisticCF, 5, optimisticInvest * 0.5);
+        var irrBase = calcIRR(baseInvest, baseCF, 5, baseInvest * 0.4);
+        var irrPess = calcIRR(pessimisticInvest, pessimisticCF, 5, pessimisticInvest * 0.3);
+
+        document.getElementById('s-inv-opt').textContent = formatCurrency(optimisticInvest);
+        document.getElementById('s-inv-base').textContent = formatCurrency(baseInvest);
+        document.getElementById('s-inv-pess').textContent = formatCurrency(pessimisticInvest);
+
+        var nOpt = document.getElementById('s-npv-opt');
+        nOpt.textContent = formatCurrency(npvOpt); nOpt.style.color = npvOpt >= 0 ? '#4CAF50' : '#F44336';
+        var nBase = document.getElementById('s-npv-base');
+        nBase.textContent = formatCurrency(npvBase); nBase.style.color = npvBase >= 0 ? '#4CAF50' : '#F44336';
+        var nPess = document.getElementById('s-npv-pess');
+        nPess.textContent = formatCurrency(npvPess); nPess.style.color = npvPess >= 0 ? '#4CAF50' : '#F44336';
+
+        var iOpt = document.getElementById('s-irr-opt');
+        iOpt.textContent = irrOpt !== null ? formatPercent(irrOpt) : 'N/A';
+        iOpt.style.color = irrOpt !== null && irrOpt >= optRate ? '#4CAF50' : '#F44336';
+        var iBase = document.getElementById('s-irr-base');
+        iBase.textContent = irrBase !== null ? formatPercent(irrBase) : 'N/A';
+        iBase.style.color = irrBase !== null && irrBase >= baseRate ? '#4CAF50' : '#F44336';
+        var iPess = document.getElementById('s-irr-pess');
+        iPess.textContent = irrPess !== null ? formatPercent(irrPess) : 'N/A';
+        iPess.style.color = irrPess !== null && irrPess >= pessRate ? '#4CAF50' : '#F44336';
+      }
+
+      // ====== Sample Data ======
+      var sampleStudies = [
+        { project: 'برج النخلة التجاري', investment: 15000000, roi: 18.5, status: 'مكتمل', date: '2026-05-15' },
+        { project: 'مشروع الوادي السكني', investment: 8500000, roi: 12.3, status: 'قيد الدراسة', date: '2026-06-20' },
+        { project: 'مجمع الظبيان الطبي', investment: 22000000, roi: 21.7, status: 'موصى به', date: '2026-06-10' },
+        { project: 'فندق المرسى السياحي', investment: 45000000, roi: 9.8, status: 'قيد الدراسة', date: '2026-06-01' },
+        { project: 'حديقة الابتكار التكنولوجي', investment: 6200000, roi: 15.2, status: 'مكتمل', date: '2026-04-28' }
+      ];
+
+      function renderStudies() {
+        var tbody = document.getElementById('studies-tbody');
+        var html = '';
+        sampleStudies.forEach(function(s) {
+          var statusClass = s.status === 'مكتمل' || s.status === 'موصى به' ? 'status-complete' : 'status-pending';
+          html += '<tr>' +
+            '<td>' + s.project + '</td>' +
+            '<td>' + formatCurrency(s.investment) + '</td>' +
+            '<td style="color:' + (s.roi > 15 ? '#4CAF50' : s.roi > 10 ? '#C9A84C' : '#F44336') + '">' + s.roi + '%</td>' +
+            '<td><span class="pmx-badge ' + statusClass + '" style="padding:4px 12px;border-radius:20px;font-size:12px;background:' + (s.status === 'مكتمل' || s.status === 'موصى به' ? 'rgba(76,175,80,0.2)' : 'rgba(201,168,76,0.2)') + ';color:' + (s.status === 'مكتمل' || s.status === 'موصى به' ? '#4CAF50' : '#C9A84C') + '">' + s.status + '</span></td>' +
+            '<td>' + s.date + '</td>' +
+            '</tr>';
+        });
+        tbody.innerHTML = html;
+      }
+
+      function updateKPIs() {
+        var totalInvest = 0;
+        var totalROI = 0;
+        sampleStudies.forEach(function(s) {
+          totalInvest += s.investment;
+          totalROI += s.roi;
+        });
+        document.getElementById('kpi-studies').textContent = sampleStudies.length;
+        document.getElementById('kpi-investment').textContent = formatCurrency(totalInvest);
+        document.getElementById('kpi-roi').textContent = (totalROI / sampleStudies.length).toFixed(1) + '%';
+      }
+
+      // ====== Init ======
+      function init() {
+        renderStudies();
+        updateKPIs();
+        updateWhatIf();
+        // Run default NPV calc
+        runNPVCalc();
+
+        document.getElementById('btn-calc-npv').addEventListener('click', runNPVCalc);
+        document.getElementById('btn-add-study').addEventListener('click', function() {
+          var newStudy = {
+            project: 'دراسة جديدة #' + (sampleStudies.length + 1),
+            investment: Math.round(Math.random() * 30000000 + 2000000),
+            roi: (Math.random() * 20 + 5).toFixed(1),
+            status: 'جديد',
+            date: new Date().toISOString().slice(0, 10)
+          };
+          newStudy.roi = parseFloat(newStudy.roi);
+          sampleStudies.push(newStudy);
+          renderStudies();
+          updateKPIs();
+          PMX.showToast('تم إضافة دراسة جديدة', 'success');
+        });
+
+        document.getElementById('wi-invest').addEventListener('input', updateWhatIf);
+        document.getElementById('wi-cf').addEventListener('input', updateWhatIf);
+        document.getElementById('wi-rate').addEventListener('input', updateWhatIf);
+
+        // Enter key support for NPV form
+        var inputs = document.querySelectorAll('#npv-investment, #npv-cashflow, #npv-rate, #npv-years, #npv-terminal');
+        inputs.forEach(function(inp) {
+          inp.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') runNPVCalc();
+          });
+        });
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
 </body>
 </html>
