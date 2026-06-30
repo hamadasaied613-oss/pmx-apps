@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" data-theme="cad2bim">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMX-LINK — CAD to BIM Conversion</title>
+  <link rel="stylesheet" href="../../pmx-ui/css/pmx-variables.css">
+  <link rel="stylesheet" href="../../pmx-ui/css/pmx-components.css">
+</head>
+<body>
+  <header class="pmx-header">
+    <a href="#" class="pmx-header-brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="6" fill="currentColor"/>
+        <text x="14" y="20" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">L</text>
+      </svg>
+      PMX-LINK
+    </a>
+    <nav class="pmx-header-nav">
+      <div class="pmx-header-user">
+        <span>CAD to BIM Conversion</span>
+        <div class="pmx-header-avatar">L</div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="pmx-main-layout">
+    <nav class="pmx-sidenav">
+      <div class="pmx-sidenav-section">Conversion</div>
+      <a class="pmx-sidenav-item active"><span class="pmx-sidenav-icon">&#x25A0;</span> Dashboard</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> New Conversion</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> History</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Templates</a>
+      <div class="pmx-sidenav-section">Settings</div>
+      <a class="pmx-sidenav-item active"><span class="pmx-sidenav-icon">&#x25A0;</span> Layer Maps</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Standards</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Export</a>
+      <div class="pmx-sidenav-section">Settings</div>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Preferences</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Team</a>
+    </nav>
+
+    <main class="pmx-content">
+      <div class="pmx-section">
+        <h1 class="pmx-section-title">PMX-LINK</h1>
+        <p class="pmx-section-subtitle">Automated CAD to BIM conversion with layer mapping and 3D generation</p>
+      </div>
+
+      <div class="pmx-kpi-grid">
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x128196;</div>
+          <div class="pmx-kpi-label">Conversions</div>
+          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-change positive">+ Ready</div>
+        </div>
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x9200;</div>
+          <div class="pmx-kpi-label">Avg. Processing</div>
+          <div class="pmx-kpi-value">0s</div>
+          <div class="pmx-kpi-change positive">+ Automated</div>
+        </div>
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x128202;</div>
+          <div class="pmx-kpi-label">Models Generated</div>
+          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-change positive">+ Ready</div>
+        </div>
+      </div>
+
+      <div class="pmx-table-wrapper">
+        <div class="pmx-flex pmx-flex-between pmx-mb-md">
+          <h3 style="color:var(--pmx-text);font-size:16px">LINK CAD</h3>
+          <button class="pmx-btn pmx-btn-primary pmx-btn-sm">+ New Conversion</button>
+        </div>
+        <table class="pmx-table">
+          <thead><tr>
+            <th>Source File</th>
+            <th>Target Format</th>
+            <th>Elements</th>
+            <th>Status</th>
+            <th>Completed</th>
+          </tr></thead>
+          <tbody>
+            <tr><td colspan="5" style="text-align:center;color:var(--pmx-text-secondary);padding:32px">No conversions yet. Upload a DWG or DXF to start.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div class="pmx-whatsapp">
+    <button class="pmx-whatsapp-btn" onclick="this.nextElementSibling.classList.toggle('open');event.stopPropagation()">&#128172;</button>
+    <div class="pmx-whatsapp-panel">
+      <div class="pmx-whatsapp-header">&#128172; PMX-LINK Alerts</div>
+      <div class="pmx-whatsapp-msg"><strong>Update</strong> - System ready <span class="pmx-whatsapp-msg-time">-</span></div>
+    </div>
+  </div>
+
+  <script src="../../pmx-ui/js/pmx-components.js"></script>
+</body>
+</html>

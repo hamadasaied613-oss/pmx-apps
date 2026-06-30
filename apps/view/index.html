@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" data-theme="dashboard">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMX-VIEW — Executive Dashboard</title>
+  <link rel="stylesheet" href="../../pmx-ui/css/pmx-variables.css">
+  <link rel="stylesheet" href="../../pmx-ui/css/pmx-components.css">
+</head>
+<body>
+  <header class="pmx-header">
+    <a href="#" class="pmx-header-brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="6" fill="currentColor"/>
+        <text x="14" y="20" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">V</text>
+      </svg>
+      PMX-VIEW
+    </a>
+    <nav class="pmx-header-nav">
+      <div class="pmx-header-user">
+        <span>Executive Dashboard</span>
+        <div class="pmx-header-avatar">V</div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="pmx-main-layout">
+    <nav class="pmx-sidenav">
+      <div class="pmx-sidenav-section">Dashboard</div>
+      <a class="pmx-sidenav-item active"><span class="pmx-sidenav-icon">&#x25A0;</span> Overview</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Projects</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Financials</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Timeline</a>
+      <div class="pmx-sidenav-section">Analytics</div>
+      <a class="pmx-sidenav-item active"><span class="pmx-sidenav-icon">&#x25A0;</span> Trends</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Benchmarks</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Reports</a>
+      <div class="pmx-sidenav-section">Settings</div>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Preferences</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Team</a>
+    </nav>
+
+    <main class="pmx-content">
+      <div class="pmx-section">
+        <h1 class="pmx-section-title">PMX-VIEW</h1>
+        <p class="pmx-section-subtitle">Real-time KPIs, project health scores, and portfolio-wide insights</p>
+      </div>
+
+      <div class="pmx-kpi-grid">
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x128200;</div>
+          <div class="pmx-kpi-label">Portfolio Health</div>
+          <div class="pmx-kpi-value">0%</div>
+          <div class="pmx-kpi-change positive">+ Stable</div>
+        </div>
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x128202;</div>
+          <div class="pmx-kpi-label">Active Projects</div>
+          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-change positive">+ Ready</div>
+        </div>
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x9888;</div>
+          <div class="pmx-kpi-label">Alerts</div>
+          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-change positive">+ None</div>
+        </div>
+      </div>
+
+      <div class="pmx-table-wrapper">
+        <div class="pmx-flex pmx-flex-between pmx-mb-md">
+          <h3 style="color:var(--pmx-text);font-size:16px">VIEW Executive</h3>
+          <button class="pmx-btn pmx-btn-primary pmx-btn-sm">Configure Widgets</button>
+        </div>
+        <table class="pmx-table">
+          <thead><tr>
+            <th>Metric</th>
+            <th>Value</th>
+            <th>Target</th>
+            <th>Status</th>
+            <th>Trend</th>
+          </tr></thead>
+          <tbody>
+            <tr><td colspan="5" style="text-align:center;color:var(--pmx-text-secondary);padding:32px">Connect your projects to see live dashboard data.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div class="pmx-whatsapp">
+    <button class="pmx-whatsapp-btn" onclick="this.nextElementSibling.classList.toggle('open');event.stopPropagation()">&#128172;</button>
+    <div class="pmx-whatsapp-panel">
+      <div class="pmx-whatsapp-header">&#128172; PMX-VIEW Alerts</div>
+      <div class="pmx-whatsapp-msg"><strong>Update</strong> - System ready <span class="pmx-whatsapp-msg-time">-</span></div>
+    </div>
+  </div>
+
+  <script src="../../pmx-ui/js/pmx-components.js"></script>
+</body>
+</html>

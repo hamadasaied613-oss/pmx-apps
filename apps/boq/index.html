@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" data-theme="boq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMX-BOQ — Bill of Quantities</title>
+  <link rel="stylesheet" href="../../pmx-ui/css/pmx-variables.css">
+  <link rel="stylesheet" href="../../pmx-ui/css/pmx-components.css">
+</head>
+<body>
+  <header class="pmx-header">
+    <a href="#" class="pmx-header-brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="6" fill="currentColor"/>
+        <text x="14" y="20" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">B</text>
+      </svg>
+      PMX-BOQ
+    </a>
+    <nav class="pmx-header-nav">
+      <div class="pmx-header-user">
+        <span>BOQ Manager</span>
+        <div class="pmx-header-avatar">B</div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="pmx-main-layout">
+    <nav class="pmx-sidenav">
+      <div class="pmx-sidenav-section">BOQ</div>
+      <a class="pmx-sidenav-item active"><span class="pmx-sidenav-icon">&#9632;</span> Dashboard</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#9632;</span> New BOQ</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#9632;</span> Templates</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#9632;</span> History</a>
+      <div class="pmx-sidenav-section">Settings</div>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#9632;</span> Rates</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#9632;</span> Categories</a>
+    </nav>
+
+    <main class="pmx-content">
+      <div class="pmx-section">
+        <h1 class="pmx-section-title">Bill of Quantities</h1>
+        <p class="pmx-section-subtitle">Automated BOQ generation from any format — PDF, Excel, CAD</p>
+      </div>
+
+      <div class="pmx-kpi-grid">
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#128221;</div>
+          <div class="pmx-kpi-label">Active BOQs</div>
+          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-change positive">&#9650; Ready</div>
+        </div>
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#128200;</div>
+          <div class="pmx-kpi-label">Total Value</div>
+          <div class="pmx-kpi-value">AED 0</div>
+          <div class="pmx-kpi-change">Pre-launch</div>
+        </div>
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#9200;</div>
+          <div class="pmx-kpi-label">Avg. Generation Time</div>
+          <div class="pmx-kpi-value">0s</div>
+          <div class="pmx-kpi-change positive">&#9650; Automated</div>
+        </div>
+      </div>
+
+      <div class="pmx-table-wrapper">
+        <div class="pmx-flex pmx-flex-between pmx-mb-md">
+          <h3 style="color:var(--pmx-text);font-size:16px">Recent BOQs</h3>
+          <button class="pmx-btn pmx-btn-primary pmx-btn-sm">+ New BOQ</button>
+        </div>
+        <table class="pmx-table">
+          <thead><tr>
+            <th>Project</th><th>Items</th><th>Total</th><th>Status</th><th>Created</th>
+          </tr></thead>
+          <tbody>
+            <tr><td colspan="5" style="text-align:center;color:var(--pmx-text-secondary);padding:32px">No BOQs yet. Create your first one.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div class="pmx-whatsapp">
+    <button class="pmx-whatsapp-btn" onclick="this.nextElementSibling.classList.toggle('open');event.stopPropagation()">&#128172;</button>
+    <div class="pmx-whatsapp-panel">
+      <div class="pmx-whatsapp-header">&#128172; PMX-BOQ Alerts</div>
+      <div class="pmx-whatsapp-msg"><strong>BOQ Generated</strong> - Villa Project <span class="pmx-whatsapp-msg-time">-</span></div>
+    </div>
+  </div>
+
+  <script src="../../pmx-ui/js/pmx-components.js"></script>
+</body>
+</html>

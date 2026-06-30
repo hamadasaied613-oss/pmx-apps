@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" data-theme="pmo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMX Bank Account Manager</title>
+  <link rel="stylesheet" href="../pmx-ui/css/pmx-variables.css">
+  <link rel="stylesheet" href="../pmx-ui/css/pmx-components.css">
+  <style>
+    .bank-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 24px; max-width: 1000px; margin: 0 auto; }
+    .bank-layout .full { grid-column: 1 / -1; }
+    .bank-section { background: var(--pmx-surface); border: 1px solid var(--pmx-border); border-radius: var(--pmx-radius); padding: 24px; box-shadow: var(--pmx-shadow); }
+    .bank-section h2 { font-size: 16px; color: var(--pmx-accent); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--pmx-border); }
+    .bank-section h2 small { font-size: 11px; color: var(--pmx-text-secondary); font-weight: 400; }
+    .rule-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--pmx-border); font-size: 13px; }
+    .rule-row:last-child { border-bottom: none; }
+    .rule-pct { color: var(--pmx-accent); font-weight: 700; min-width: 50px; }
+    .sweep-status { display: flex; align-items: center; gap: 8px; padding: 16px; background: var(--pmx-bg); border-radius: var(--pmx-radius); margin-top: 12px; }
+    .sweep-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--pmx-success); animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+    .encrypt-badge { font-size: 10px; background: #1A1500; color: #C9A84C; padding: 2px 8px; border-radius: 4px; border: 1px solid #C9A84C; }
+  </style>
+</head>
+<body>
+  <header class="pmx-header">
+    <a href="#" class="pmx-header-brand">&#9632; PMX Bank Manager</a>
+    <nav class="pmx-header-nav">
+      <div class="pmx-header-user"><span>Owner</span><div class="pmx-header-avatar">O</div></div>
+    </nav>
+  </header>
+
+  <div class="bank-layout">
+    <div class="full"><h1 style="font-size:24px;color:var(--pmx-accent);margin-bottom:4px">&#128176; Bank Account Manager</h1><p style="color:var(--pmx-text-secondary);font-size:14px">Two-account strategy: A receives PayPal, B is main vault. Daily auto-sweep at 18:00.</p></div>
+
+    <div class="bank-section">
+      <h2>&#128179; Account A — PMX-GATEWAY <small>PayPal-linked (高风险)</small></h2>
+      <label class="pmx-bank-label">Bank Name</label>
+      <input class="pmx-bank-input" value="Emirates NBD" style="margin-bottom:12px">
+      <label class="pmx-bank-label">IBAN <span class="encrypt-badge">AES-256</span></label>
+      <input class="pmx-bank-input" placeholder="AE___________________________" style="margin-bottom:12px">
+      <div style="display:flex;gap:12px">
+        <div style="flex:1"><label class="pmx-bank-label">Min Balance</label><input class="pmx-bank-input" value="100 AED"></div>
+        <div style="flex:1"><label class="pmx-bank-label">Currency</label><input class="pmx-bank-input" value="AED" disabled></div>
+      </div>
+    </div>
+
+    <div class="bank-section">
+      <h2>&#128179; Account B — PMX-VAULT <small>Main operational</small></h2>
+      <label class="pmx-bank-label">Bank Name</label>
+      <input class="pmx-bank-input" value="Emirates NBD" style="margin-bottom:12px">
+      <label class="pmx-bank-label">IBAN <span class="encrypt-badge">AES-256</span></label>
+      <input class="pmx-bank-input" placeholder="AE___________________________" style="margin-bottom:12px">
+      <div style="display:flex;gap:12px">
+        <div style="flex:1"><label class="pmx-bank-label">Min Balance</label><input class="pmx-bank-input" value="0 AED"></div>
+        <div style="flex:1"><label class="pmx-bank-label">Currency</label><input class="pmx-bank-input" value="AED" disabled></div>
+      </div>
+    </div>
+
+    <div class="bank-section">
+      <h2>&#9881; Allocation Rules</h2>
+      <div class="rule-row"><span class="rule-pct">100%</span> PayPal receipts daily sweep to Account B</div>
+      <div class="rule-row"><span class="rule-pct">100%</span> All subscription revenue → Account B</div>
+      <div class="rule-row"><span class="rule-pct">Min</span> Account A retains 100 AED only</div>
+      <div class="rule-row"><span class="rule-pct">0%</span> No funds stay in PayPal account overnight</div>
+    </div>
+
+    <div class="bank-section">
+      <h2>&#128260; Auto-Sweep Status</h2>
+      <div class="sweep-status">
+        <div class="sweep-dot"></div>
+        <div><strong>Active</strong> — Daily sweep at 18:00 GST<br><span style="font-size:12px;color:var(--pmx-text-secondary)">Account A (100 AED min) → Account B (all surplus)</span></div>
+        <button class="pmx-btn pmx-btn-primary pmx-btn-sm" style="margin-left:auto" onclick="PMX.showNotification('Sweep executed manually: Account A balance moved to Account B')">Sweep Now</button>
+      </div>
+    </div>
+
+    <div class="full">
+      <button class="pmx-btn pmx-btn-primary" onclick="PMX.showNotification('Accounts saved — all IBAN data encrypted locally AES-256-GCM')">&#128274; Save All (Encrypted)</button>
+      <button class="pmx-btn pmx-btn-secondary" style="margin-left:12px" onclick="PMX.showNotification('Configuration exported to workbook')">&#128230; Export to Workbook</button>
+    </div>
+  </div>
+
+  <script src="../pmx-ui/js/pmx-components.js"></script>
+</body>
+</html>

@@ -1,0 +1,611 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--pmx-font);
+  background: var(--pmx-bg);
+  color: var(--pmx-text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* 1. AppHeader */
+.pmx-header {
+  background: var(--pmx-surface);
+  border-bottom: 1px solid var(--pmx-border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--pmx-shadow);
+}
+
+.pmx-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--pmx-accent);
+  text-decoration: none;
+}
+
+.pmx-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pmx-header-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--pmx-text-secondary);
+  font-size: 14px;
+}
+
+.pmx-header-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--pmx-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--pmx-bg);
+}
+
+/* 2. SideNav */
+.pmx-sidenav {
+  width: 240px;
+  background: var(--pmx-surface);
+  border-right: 1px solid var(--pmx-border);
+  height: calc(100vh - 56px);
+  position: fixed;
+  left: 0;
+  top: 56px;
+  overflow-y: auto;
+  padding: 16px 0;
+  z-index: 50;
+}
+
+.pmx-sidenav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 24px;
+  color: var(--pmx-text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+
+.pmx-sidenav-item:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--pmx-text);
+}
+
+.pmx-sidenav-item.active {
+  background: rgba(255,255,255,0.08);
+  color: var(--pmx-accent);
+  border-left-color: var(--pmx-accent);
+}
+
+.pmx-sidenav-icon {
+  width: 20px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.pmx-sidenav-section {
+  padding: 8px 24px 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--pmx-text-secondary);
+  opacity: 0.6;
+}
+
+/* 3. KPI Card */
+.pmx-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  padding: 24px;
+}
+
+.pmx-kpi-card {
+  background: var(--pmx-surface);
+  border: 1px solid var(--pmx-border);
+  border-radius: var(--pmx-radius);
+  padding: 20px;
+  box-shadow: var(--pmx-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
+}
+
+.pmx-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+}
+
+.pmx-kpi-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--pmx-text-secondary);
+  margin-bottom: 8px;
+}
+
+.pmx-kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--pmx-text);
+  margin-bottom: 4px;
+}
+
+.pmx-kpi-change {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pmx-kpi-change.positive { color: var(--pmx-success); }
+.pmx-kpi-change.negative { color: var(--pmx-error); }
+
+.pmx-kpi-icon {
+  float: right;
+  font-size: 32px;
+  opacity: 0.3;
+  color: var(--pmx-accent);
+}
+
+/* 4. DataTable */
+.pmx-table-wrapper {
+  padding: 24px;
+  overflow-x: auto;
+}
+
+.pmx-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--pmx-surface);
+  border-radius: var(--pmx-radius);
+  overflow: hidden;
+  box-shadow: var(--pmx-shadow);
+}
+
+.pmx-table th {
+  background: var(--pmx-secondary);
+  color: var(--pmx-text);
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pmx-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--pmx-border);
+  font-size: 14px;
+}
+
+.pmx-table tr:last-child td {
+  border-bottom: none;
+}
+
+.pmx-table tr:hover td {
+  background: rgba(255,255,255,0.03);
+}
+
+/* 5. ActionButton */
+.pmx-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--pmx-radius);
+  font-family: var(--pmx-font);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.pmx-btn-primary {
+  background: var(--pmx-accent);
+  color: var(--pmx-bg);
+}
+
+.pmx-btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.pmx-btn-secondary {
+  background: var(--pmx-secondary);
+  color: var(--pmx-text);
+  border: 1px solid var(--pmx-border);
+}
+
+.pmx-btn-secondary:hover {
+  background: var(--pmx-border);
+}
+
+.pmx-btn-danger {
+  background: var(--pmx-error);
+  color: #fff;
+}
+
+.pmx-btn-danger:hover {
+  opacity: 0.9;
+}
+
+.pmx-btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.pmx-btn-lg {
+  padding: 14px 28px;
+  font-size: 16px;
+}
+
+/* 6. StatusBadge */
+.pmx-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.pmx-badge-active { background: rgba(39,174,96,0.15); color: var(--pmx-success); }
+.pmx-badge-pending { background: rgba(243,156,18,0.15); color: var(--pmx-warning); }
+.pmx-badge-error { background: rgba(231,76,60,0.15); color: var(--pmx-error); }
+.pmx-badge-inactive { background: rgba(136,146,176,0.15); color: var(--pmx-text-secondary); }
+
+/* 7. AppCarousel */
+.pmx-carousel {
+  padding: 24px;
+  overflow: hidden;
+}
+
+.pmx-carousel-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 8px;
+}
+
+.pmx-carousel-track::-webkit-scrollbar {
+  height: 4px;
+}
+
+.pmx-carousel-track::-webkit-scrollbar-track {
+  background: var(--pmx-bg);
+  border-radius: 2px;
+}
+
+.pmx-carousel-track::-webkit-scrollbar-thumb {
+  background: var(--pmx-border);
+  border-radius: 2px;
+}
+
+.pmx-carousel-card {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+  background: var(--pmx-surface);
+  border: 1px solid var(--pmx-border);
+  border-radius: var(--pmx-radius);
+  padding: 20px;
+  box-shadow: var(--pmx-shadow);
+  transition: transform 0.2s;
+}
+
+.pmx-carousel-card:hover {
+  transform: translateY(-4px);
+}
+
+.pmx-carousel-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pmx-accent);
+  margin-bottom: 8px;
+}
+
+.pmx-carousel-card-desc {
+  font-size: 13px;
+  color: var(--pmx-text-secondary);
+  line-height: 1.5;
+}
+
+/* 8. FinancialCard */
+.pmx-fin-card {
+  background: var(--pmx-surface);
+  border: 1px solid var(--pmx-border);
+  border-radius: var(--pmx-radius);
+  padding: 20px;
+  box-shadow: var(--pmx-shadow);
+}
+
+.pmx-fin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.pmx-fin-card-title {
+  font-size: 14px;
+  color: var(--pmx-text-secondary);
+}
+
+.pmx-fin-card-amount {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--pmx-text);
+}
+
+.pmx-fin-card-currency {
+  font-size: 14px;
+  color: var(--pmx-text-secondary);
+  margin-left: 4px;
+}
+
+.pmx-fin-card-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--pmx-border);
+  border-radius: 2px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.pmx-fin-card-bar-fill {
+  height: 100%;
+  background: var(--pmx-accent);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* 9. WhatsAppWidget */
+.pmx-whatsapp {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+}
+
+.pmx-whatsapp-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(37,211,102,0.4);
+  transition: transform 0.2s;
+}
+
+.pmx-whatsapp-btn:hover {
+  transform: scale(1.1);
+}
+
+.pmx-whatsapp-panel {
+  position: absolute;
+  bottom: 68px;
+  right: 0;
+  width: 340px;
+  background: var(--pmx-surface);
+  border: 1px solid var(--pmx-border);
+  border-radius: var(--pmx-radius);
+  box-shadow: var(--pmx-shadow);
+  overflow: hidden;
+  display: none;
+}
+
+.pmx-whatsapp-panel.open { display: block; }
+
+.pmx-whatsapp-header {
+  background: #075E54;
+  color: #fff;
+  padding: 16px;
+  font-weight: 600;
+}
+
+.pmx-whatsapp-msg {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--pmx-border);
+  font-size: 13px;
+  color: var(--pmx-text);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pmx-whatsapp-msg:hover {
+  background: rgba(255,255,255,0.05);
+}
+
+.pmx-whatsapp-msg-time {
+  float: right;
+  font-size: 11px;
+  color: var(--pmx-text-secondary);
+}
+
+/* 10. PaymentButton */
+.pmx-pay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, var(--pmx-accent), var(--pmx-primary));
+  color: #fff;
+  border: none;
+  border-radius: var(--pmx-radius);
+  font-family: var(--pmx-font);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+}
+
+.pmx-pay-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(201,168,76,0.5);
+}
+
+.pmx-pay-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 11. ThemeToggle */
+.pmx-theme-toggle {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--pmx-bg);
+  border-radius: var(--pmx-radius);
+}
+
+.pmx-theme-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pmx-theme-dot.active {
+  border-color: var(--pmx-accent);
+  transform: scale(1.15);
+}
+
+.pmx-theme-dot:hover {
+  transform: scale(1.1);
+}
+
+/* 12. BankAccountManager (embedded) */
+.pmx-bank-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 24px;
+}
+
+.pmx-bank-form .full-width {
+  grid-column: 1 / -1;
+}
+
+.pmx-bank-label {
+  display: block;
+  font-size: 12px;
+  color: var(--pmx-text-secondary);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pmx-bank-input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--pmx-bg);
+  border: 1px solid var(--pmx-border);
+  border-radius: var(--pmx-radius);
+  color: var(--pmx-text);
+  font-family: var(--pmx-font);
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.pmx-bank-input:focus {
+  outline: none;
+  border-color: var(--pmx-accent);
+}
+
+.pmx-bank-input::placeholder {
+  color: var(--pmx-text-secondary);
+  opacity: 0.5;
+}
+
+/* Layout Helpers */
+.pmx-main-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.pmx-content {
+  margin-left: 240px;
+  padding-top: 56px;
+  flex: 1;
+}
+
+.pmx-section {
+  padding: 24px;
+}
+
+.pmx-section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--pmx-text);
+  margin-bottom: 4px;
+}
+
+.pmx-section-subtitle {
+  font-size: 14px;
+  color: var(--pmx-text-secondary);
+  margin-bottom: 24px;
+}
+
+.pmx-card {
+  background: var(--pmx-surface);
+  border: 1px solid var(--pmx-border);
+  border-radius: var(--pmx-radius);
+  box-shadow: var(--pmx-shadow);
+}
+
+.pmx-flex {
+  display: flex;
+  gap: 16px;
+}
+
+.pmx-flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pmx-gap-sm { gap: 8px; }
+.pmx-gap-md { gap: 16px; }
+.pmx-gap-lg { gap: 24px; }
+
+.pmx-mt-md { margin-top: 16px; }
+.px-mb-md { margin-bottom: 16px; }

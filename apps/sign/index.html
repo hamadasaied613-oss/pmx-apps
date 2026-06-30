@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ar" data-theme="contract">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMX-SIGN — Contract Management</title>
+  <link rel="stylesheet" href="../../pmx-ui/css/pmx-variables.css">
+  <link rel="stylesheet" href="../../pmx-ui/css/pmx-components.css">
+</head>
+<body>
+  <header class="pmx-header">
+    <a href="#" class="pmx-header-brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="6" fill="currentColor"/>
+        <text x="14" y="20" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">S</text>
+      </svg>
+      PMX-SIGN
+    </a>
+    <nav class="pmx-header-nav">
+      <div class="pmx-header-user">
+        <span>Contract Management</span>
+        <div class="pmx-header-avatar">S</div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="pmx-main-layout">
+    <nav class="pmx-sidenav">
+      <div class="pmx-sidenav-section">Contracts</div>
+      <a class="pmx-sidenav-item active"><span class="pmx-sidenav-icon">&#x25A0;</span> Dashboard</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> All Contracts</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> AI Analysis</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Compliance</a>
+      <div class="pmx-sidenav-section">Settings</div>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Templates</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Preferences</a>
+    </nav>
+
+    <main class="pmx-content">
+      <div class="pmx-section">
+        <h1 class="pmx-section-title">PMX-SIGN</h1>
+        <p class="pmx-section-subtitle">AI-powered contract management with clause analysis, compliance tracking, and risk detection</p>
+      </div>
+
+      <div class="pmx-kpi-grid">
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x128203;</div>
+          <div class="pmx-kpi-label">Active Contracts</div>
+          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-change positive">+ Ready</div>
+        </div>
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x9888;</div>
+          <div class="pmx-kpi-label">Risk Items</div>
+          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-change positive">+ Cleared</div>
+        </div>
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x8987;</div>
+          <div class="pmx-kpi-label">Expiring Soon</div>
+          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-change positive">+ On Track</div>
+        </div>
+      </div>
+
+      <div class="pmx-table-wrapper">
+        <div class="pmx-flex pmx-flex-between pmx-mb-md">
+          <h3 style="color:var(--pmx-text);font-size:16px">Recent Contract</h3>
+          <button class="pmx-btn pmx-btn-primary pmx-btn-sm">+ New Contract</button>
+        </div>
+        <table class="pmx-table">
+          <thead><tr>
+            <th>Contract</th>
+            <th>Party</th>
+            <th>Value</th>
+            <th>Status</th>
+            <th>Expiry</th>
+          </tr></thead>
+          <tbody>
+            <tr><td colspan="5" style="text-align:center;color:var(--pmx-text-secondary);padding:32px">No contracts yet. Upload your first contract for AI analysis.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div class="pmx-whatsapp">
+    <button class="pmx-whatsapp-btn" onclick="this.nextElementSibling.classList.toggle('open');event.stopPropagation()">&#128172;</button>
+    <div class="pmx-whatsapp-panel">
+      <div class="pmx-whatsapp-header">&#128172; PMX-SIGN Alerts</div>
+      <div class="pmx-whatsapp-msg"><strong>System Ready</strong> - Waiting for data <span class="pmx-whatsapp-msg-time">-</span></div>
+    </div>
+  </div>
+
+  <script src="../../pmx-ui/js/pmx-components.js"></script>
+</body>
+</html>

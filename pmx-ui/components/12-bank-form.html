@@ -1,0 +1,24 @@
+<div class="pmx-card" style="margin:24px;max-width:600px">
+  <div class="pmx-bank-form">
+    <div class="full-width">
+      <label class="pmx-bank-label">Bank Name</label>
+      <input class="pmx-bank-input" placeholder="e.g. Emirates NBD" value="Account A - PayPal Linked">
+    </div>
+    <div class="full-width">
+      <label class="pmx-bank-label">IBAN (AES-256 Encrypted)</label>
+      <input class="pmx-bank-input" placeholder="AE123456789012345678901">
+    </div>
+    <div>
+      <label class="pmx-bank-label">Account Type</label>
+      <input class="pmx-bank-input" value="High-Risk / PayPal">
+    </div>
+    <div>
+      <label class="pmx-bank-label">Min Balance</label>
+      <input class="pmx-bank-input" value="100 AED">
+    </div>
+    <div class="full-width pmx-flex pmx-gap-md">
+      <button class="pmx-btn pmx-btn-primary" onclick="PMX.showNotification('Account encrypted & saved', 'success')">Save Account</button>
+      <button class="pmx-btn pmx-btn-secondary" onclick="PMX.showNotification('Allocation rules applied', 'info')">Set Rules</button>
+    </div>
+  </div>
+</div>

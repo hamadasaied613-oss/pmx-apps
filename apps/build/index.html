@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" data-theme="bim">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMX-BUILD — Building Information Modeling</title>
+  <link rel="stylesheet" href="../../pmx-ui/css/pmx-variables.css">
+  <link rel="stylesheet" href="../../pmx-ui/css/pmx-components.css">
+</head>
+<body>
+  <header class="pmx-header">
+    <a href="#" class="pmx-header-brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="6" fill="currentColor"/>
+        <text x="14" y="20" text-anchor="middle" font-size="16" font-weight="bold" fill="#fff">B</text>
+      </svg>
+      PMX-BUILD
+    </a>
+    <nav class="pmx-header-nav">
+      <div class="pmx-header-user">
+        <span>Building Information Modeling</span>
+        <div class="pmx-header-avatar">B</div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="pmx-main-layout">
+    <nav class="pmx-sidenav">
+      <div class="pmx-sidenav-section">BIM</div>
+      <a class="pmx-sidenav-item active"><span class="pmx-sidenav-icon">&#x25A0;</span> Dashboard</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Model Viewer</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Clash Detection</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> QTO</a>
+      <div class="pmx-sidenav-section">Library</div>
+      <a class="pmx-sidenav-item active"><span class="pmx-sidenav-icon">&#x25A0;</span> Families</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Templates</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Standards</a>
+      <div class="pmx-sidenav-section">Settings</div>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Preferences</a>
+      <a class="pmx-sidenav-item"><span class="pmx-sidenav-icon">&#x25A0;</span> Team</a>
+    </nav>
+
+    <main class="pmx-content">
+      <div class="pmx-section">
+        <h1 class="pmx-section-title">PMX-BUILD</h1>
+        <p class="pmx-section-subtitle">3D model viewing, clash detection, quantity extraction from BIM models</p>
+      </div>
+
+      <div class="pmx-kpi-grid">
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x128202;</div>
+          <div class="pmx-kpi-label">Active Models</div>
+          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-change positive">+ Ready</div>
+        </div>
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x9888;</div>
+          <div class="pmx-kpi-label">Clashes Detected</div>
+          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-change positive">+ Cleared</div>
+        </div>
+        <div class="pmx-kpi-card">
+          <div class="pmx-kpi-icon">&#x128221;</div>
+          <div class="pmx-kpi-label">Qty Extractions</div>
+          <div class="pmx-kpi-value">0</div>
+          <div class="pmx-kpi-change positive">+ Ready</div>
+        </div>
+      </div>
+
+      <div class="pmx-table-wrapper">
+        <div class="pmx-flex pmx-flex-between pmx-mb-md">
+          <h3 style="color:var(--pmx-text);font-size:16px">BUILD Building</h3>
+          <button class="pmx-btn pmx-btn-primary pmx-btn-sm">+ Upload Model</button>
+        </div>
+        <table class="pmx-table">
+          <thead><tr>
+            <th>Model</th>
+            <th>Version</th>
+            <th>Elements</th>
+            <th>Status</th>
+            <th>Updated</th>
+          </tr></thead>
+          <tbody>
+            <tr><td colspan="5" style="text-align:center;color:var(--pmx-text-secondary);padding:32px">No BIM models loaded. Upload your first .ifc or .rvt file.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <div class="pmx-whatsapp">
+    <button class="pmx-whatsapp-btn" onclick="this.nextElementSibling.classList.toggle('open');event.stopPropagation()">&#128172;</button>
+    <div class="pmx-whatsapp-panel">
+      <div class="pmx-whatsapp-header">&#128172; PMX-BUILD Alerts</div>
+      <div class="pmx-whatsapp-msg"><strong>Update</strong> - System ready <span class="pmx-whatsapp-msg-time">-</span></div>
+    </div>
+  </div>
+
+  <script src="../../pmx-ui/js/pmx-components.js"></script>
+</body>
+</html>

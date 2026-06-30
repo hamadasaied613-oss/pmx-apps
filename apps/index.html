@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMX — Engineering Software Suite</title>
+  <link rel="stylesheet" href="../pmx-ui/css/pmx-variables.css">
+  <link rel="stylesheet" href="../pmx-ui/css/pmx-components.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0A1628; color: #E6E6E6; min-height: 100vh; }
+    .hero { text-align: center; padding: 60px 20px 40px; }
+    .hero h1 { font-size: 42px; font-weight: 800; color: #C9A84C; letter-spacing: -1px; }
+    .hero h1 span { color: #E6E6E6; }
+    .hero p { color: #8892B0; font-size: 16px; margin-top: 8px; }
+    .hero .badge { display: inline-block; background: #112240; color: #C9A84C; padding: 4px 16px; border-radius: 20px; font-size: 12px; margin-top: 12px; border: 1px solid #1E3A5F; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 0 40px 40px; max-width: 1200px; margin: 0 auto; }
+    .card { background: #112240; border-radius: 10px; padding: 24px; text-decoration: none; color: inherit; border: 1px solid #1E3A5F; transition: all 0.25s ease; position: relative; overflow: hidden; display: block; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); border-color: #C9A84C; }
+    .card.disabled { opacity: 0.4; cursor: default; pointer-events: none; }
+    .card-stripe { height: 4px; position: absolute; top: 0; left: 0; right: 0; }
+    .card-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: #fff; }
+    .card h2 { font-size: 18px; font-weight: 700; margin-top: 14px; }
+    .card .old-name { font-size: 11px; color: #8892B0; opacity: 0.5; text-decoration: line-through; }
+    .card p { font-size: 13px; color: #8892B0; margin-top: 6px; line-height: 1.6; }
+    .card .status { display: inline-block; margin-top: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .section-title { max-width: 1200px; margin: 40px auto 16px; padding: 0 40px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #8892B0; opacity: 0.5; }
+    footer { text-align: center; padding: 32px; color: #8892B0; font-size: 13px; border-top: 1px solid #1E3A5F; margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h1>PMX <span>Engineering Suite</span></h1>
+    <p>9 integrated applications · Zero subscription cost · One design system</p>
+    <div class="badge">pmx.ae</div>
+  </div>
+
+  <div class="section-title">— Commercial Applications —</div>
+  <div class="grid">
+    <a href="boq/index.html" class="card"><div class="card-stripe" style="background:#8B0000"></div><div class="card-icon" style="background:#8B0000">B</div><h2>PMX-BOQ</h2><p>Bill of Quantities automation from any format — PDF, Excel, CAD.</p><span class="status" style="color:#27AE60">&#9632; Live</span></a>
+
+    <a href="sign/index.html" class="card"><div class="card-stripe" style="background:#4A4A4A"></div><div class="card-icon" style="background:#4A4A4A">S</div><h2>PMX-SIGN</h2><div class="old-name">formerly PMX-Contract</div><p>AI-powered contract management with clause analysis and compliance.</p><span class="status" style="color:#27AE60">&#9632; Live</span></a>
+
+    <a href="focus/index.html" class="card"><div class="card-stripe" style="background:#B8860B"></div><div class="card-icon" style="background:#B8860B">F</div><h2>PMX-FOCUS</h2><div class="old-name">formerly PMX-Feasibility</div><p>Feasibility studies with instant ROI, NPV, IRR — automated reports.</p><span class="status" style="color:#27AE60">&#9632; Live</span></a>
+
+    <a href="pilot/index.html" class="card"><div class="card-stripe" style="background:#1A5276"></div><div class="card-icon" style="background:#1A5276">P</div><h2>PMX-PILOT</h2><div class="old-name">formerly PMX-PMO</div><p>Project portfolio tracking, resource allocation, milestone management.</p><span class="status" style="color:#F39C12">&#9632; Built</span></a>
+
+    <a href="build/index.html" class="card"><div class="card-stripe" style="background:#1E8449"></div><div class="card-icon" style="background:#1E8449">B</div><h2>PMX-BUILD</h2><div class="old-name">formerly PMX-BIM</div><p>BIM model viewing, clash detection, quantity extraction from IFC/RVT.</p><span class="status" style="color:#F39C12">&#9632; Built</span></a>
+
+    <a href="view/index.html" class="card"><div class="card-stripe" style="background:#6C3483"></div><div class="card-icon" style="background:#6C3483">V</div><h2>PMX-VIEW</h2><div class="old-name">formerly PMX-Dashboard</div><p>Executive dashboard with real-time KPIs and project health scores.</p><span class="status" style="color:#F39C12">&#9632; Built</span></a>
+
+    <a href="site/index.html" class="card"><div class="card-stripe" style="background:#D35400"></div><div class="card-icon" style="background:#D35400">S</div><h2>PMX-SITE</h2><div class="old-name">formerly PMX-Inspector</div><p>Site inspections with photo docs, punch lists, and digital sign-offs.</p><span class="status" style="color:#F39C12">&#9632; Built</span></a>
+
+    <a href="link/index.html" class="card"><div class="card-stripe" style="background:#0E6655"></div><div class="card-icon" style="background:#0E6655">L</div><h2>PMX-LINK</h2><div class="old-name">formerly PMX-CAD2BIM</div><p>Automated CAD to BIM conversion with layer mapping and 3D generation.</p><span class="status" style="color:#F39C12">&#9632; Built</span></a>
+
+    <a href="wise/index.html" class="card"><div class="card-stripe" style="background:#283593"></div><div class="card-icon" style="background:#283593">W</div><h2>PMX-WISE</h2><div class="old-name">formerly PMX-Knowledge</div><p>Searchable engineering specs, standards, best practices, and lessons learned.</p><span class="status" style="color:#F39C12">&#9632; Built</span></a>
+  </div>
+
+  <div class="section-title">— Internal Engines (Hidden from customers) —</div>
+  <div class="grid">
+    <div class="card disabled"><div class="card-stripe" style="background:#E74C3C"></div><h2>n8n Engine</h2><p>6,500+ workflows powering all 9 apps invisibly. Competitive moat.</p></div>
+    <div class="card disabled"><div class="card-stripe" style="background:#F39C12"></div><h2>Ad Revenue Layer</h2><p>$1,400/mo floor. Ads in free tier, removed on subscription.</p></div>
+  </div>
+
+  <footer>&#9632; PMX — pmx.ae — All tools free/open-source. Built for engineering excellence.</footer>
+</body>
+</html>
