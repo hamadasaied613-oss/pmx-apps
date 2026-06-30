@@ -1,0 +1,3 @@
+# PMX Public Deploy - exclude sensitive internal tools
+apps/financial-panel.html
+apps/sweep-panel.html

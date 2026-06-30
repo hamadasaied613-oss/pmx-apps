@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" data-theme="pmo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PMX — Subscription Plans</title>
+  <link rel="stylesheet" href="../pmx-ui/css/pmx-variables.css">
+  <link rel="stylesheet" href="../pmx-ui/css/pmx-components.css">
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0A1628; color: #E6E6E6; padding: 20px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    h1 { color: #C9A84C; font-size: 28px; text-align: center; margin-bottom: 4px; }
+    .subtitle { color: #8892B0; text-align: center; font-size: 14px; margin-bottom: 30px; }
+    .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 30px; }
+    .plan { background: #112240; border: 1px solid #1E3A5F; border-radius: 12px; padding: 24px; text-align: center; transition: all 0.3s; position: relative; }
+    .plan:hover { border-color: #C9A84C; transform: translateY(-4px); }
+    .plan.featured { border-color: #C9A84C; box-shadow: 0 0 20px rgba(201,168,76,0.15); }
+    .plan.featured::before { content: 'الأكثر طلباً'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #C9A84C; color: #0A1628; padding: 4px 16px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+    .plan h2 { color: #E6E6E6; font-size: 18px; margin-bottom: 4px; }
+    .plan .apps { color: #8892B0; font-size: 12px; margin-bottom: 16px; }
+    .plan .price { color: #C9A84C; font-size: 36px; font-weight: 700; }
+    .plan .price span { font-size: 14px; color: #8892B0; }
+    .plan ul { list-style: none; padding: 0; margin: 16px 0; text-align: right; }
+    .plan ul li { color: #E6E6E6; font-size: 13px; padding: 6px 0; border-bottom: 1px solid #0A1628; }
+    .plan ul li::before { content: '✓ '; color: #27AE60; }
+    .plan .paypal-btn { margin-top: 16px; min-height: 45px; }
+    .btn-sub { background: #C9A84C; color: #0A1628; border: none; padding: 12px 30px; border-radius: 6px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%; transition: all 0.2s; }
+    .btn-sub:hover { opacity: 0.9; }
+    .back-link { text-align: center; margin-top: 20px; }
+    .back-link a { color: #8892B0; font-size: 13px; text-decoration: none; }
+    .back-link a:hover { color: #C9A84C; }
+    .footer { text-align: center; font-size: 11px; color: #8892B0; margin-top: 30px; }
+
+    @media (max-width: 700px) {
+      .plans { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div style="background:#1A1500;border:1px solid #C9A84C;border-radius:8px;padding:10px 16px;text-align:center;margin-bottom:20px">
+      <span style="color:#C9A84C;font-size:13px">&#9888; وضع الاختبار (Sandbox) — استخدم حساب PayPal التجريبي للدفع</span>
+    </div>
+    <h1>PMX Subscription Plans</h1>
+    <p class="subtitle">اختر خطتك — الدفع عبر PayPal • إلغاء في أي وقت</p>
+
+    <div class="plans">
+      <!-- Basic -->
+      <div class="plan">
+        <h2>Basic</h2>
+        <div class="apps">PMX-SIGN · PMX-SITE · PMX-LINK</div>
+        <div class="price">49 <span>AED/شهر</span></div>
+        <ul>
+          <li>توقيع المستندات</li>
+          <li>التفتيش الميداني</li>
+          <li>ربط CAD → BIM</li>
+          <li>دعم تيليجرام</li>
+        </ul>
+        <div id="paypal-button-basic"></div>
+      </div>
+
+      <!-- Pro (Featured) -->
+      <div class="plan featured">
+        <h2>Pro</h2>
+        <div class="apps">PMX-BOQ · PMX-FOCUS · PMX-VIEW · PMX-WISE</div>
+        <div class="price">99 <span>AED/شهر</span></div>
+        <ul>
+          <li>إدارة الكميات (BOQ)</li>
+          <li>دراسات الجدوى</li>
+          <li>لوحات البيانات</li>
+          <li>قاعدة المعرفة</li>
+          <li>كل مزايا Basic</li>
+        </ul>
+        <div id="paypal-button-pro"></div>
+      </div>
+
+      <!-- Premium -->
+      <div class="plan">
+        <h2>Premium</h2>
+        <div class="apps">PMX-PILOT · PMX-BUILD</div>
+        <div class="price">199 <span>AED/شهر</span></div>
+        <ul>
+          <li>إدارة المشاريع</li>
+          <li>BIM وإدارة البناء</li>
+          <li>كل مزايا Pro</li>
+          <li>أولوية الدعم</li>
+          <li>API للربط الخارجي</li>
+        </ul>
+        <div id="paypal-button-premium"></div>
+      </div>
+    </div>
+
+    <div class="back-link">
+      <a href="index.html">&#8592; الرجوع لتطبيقات PMX</a>
+    </div>
+    <div class="footer">PMX Engineering Suite © 2026 — جميع المدفوعات عبر PayPal</div>
+  </div>
+
+  <!-- PayPal SDK (Sandbox) -->
+  <script src="https://www.paypal.com/sdk/js?client_id=BAA20OIsS3jOcDn4e9nepxUJO82iyBQvm13Hj8_47OB2UciwhVL75O0IFu6c55kpFsVsf2EghnEN1gVV20&currency=AED&vault=true&enable-funding=venmo" data-namespace="paypal_sdk"></script>
+
+  <script>
+    const PLANS = {
+      basic: { price: '49.00', desc: 'PMX Basic — 3 Apps' },
+      pro: { price: '99.00', desc: 'PMX Pro — 4 Apps' },
+      premium: { price: '199.00', desc: 'PMX Premium — 2 Apps' }
+    };
+
+    // Render PayPal buttons for each plan
+    Object.entries(PLANS).forEach(([key, plan]) => {
+      paypal_sdk.Buttons({
+        style: { color: 'gold', shape: 'rect', label: 'subscribe', layout: 'horizontal', tagline: false },
+        createSubscription: function(data, actions) {
+          return actions.subscription.create({
+            plan_id: key === 'basic' ? 'P-2TU68145T86991135NJBY5WQ' : key === 'pro' ? 'P-7XF72057H9297333TNJBY5XA' : 'P-3RM057081R577733PNJBY5XI',
+            custom_id: key
+          });
+        },
+        onApprove: function(data) {
+          fetch('http://localhost:3456/webhooks/pmx/subscribed', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ plan: key, subscriptionId: data.subscriptionID, time: new Date().toISOString() })
+          }).catch(() => {});
+          alert('✅ اشتراك تم بنجاح! إشعار مرسل.');
+        },
+        onError: function(err) {
+          alert('❌ حدث خطأ: ' + err.message);
+        }
+      }).render('#paypal-button-' + key);
+    });
+  </script>
+</body>
+</html>
