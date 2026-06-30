@@ -39,18 +39,19 @@
 </head>
 <body>
   <div class="container">
-    <div style="background:#1A1500;border:1px solid #C9A84C;border-radius:8px;padding:10px 16px;text-align:center;margin-bottom:20px">
-      <span style="color:#C9A84C;font-size:13px">&#9888; وضع الاختبار (Sandbox) — استخدم حساب PayPal التجريبي للدفع</span>
+    <div style="background:#0D2818;border:1px solid #27AE60;border-radius:8px;padding:10px 16px;text-align:center;margin-bottom:20px">
+      <span style="color:#27AE60;font-size:13px">&#10004; LIVE — مدفوعات حقيقية عبر PayPal بالدولار (USD)</span>
+      <br><span style="color:#8892B0;font-size:11px">تظهر الفاتورة بالدرهم (AED) على حسابك — التحويل تلقائي من PayPal</span>
     </div>
     <h1>PMX Subscription Plans</h1>
-    <p class="subtitle">اختر خطتك — الدفع عبر PayPal • إلغاء في أي وقت</p>
+    <p class="subtitle">اختر خطتك — الدفع عبر PayPal • USD/month • إلغاء في أي وقت</p>
 
     <div class="plans">
       <!-- Basic -->
       <div class="plan">
         <h2>Basic</h2>
         <div class="apps">PMX-SIGN · PMX-SITE · PMX-LINK</div>
-        <div class="price">49 <span>AED/شهر</span></div>
+        <div class="price">13.35 <span>USD/شهر (~49 AED)</span></div>
         <ul>
           <li>توقيع المستندات</li>
           <li>التفتيش الميداني</li>
@@ -64,7 +65,7 @@
       <div class="plan featured">
         <h2>Pro</h2>
         <div class="apps">PMX-BOQ · PMX-FOCUS · PMX-VIEW · PMX-WISE</div>
-        <div class="price">99 <span>AED/شهر</span></div>
+        <div class="price">26.95 <span>USD/شهر (~99 AED)</span></div>
         <ul>
           <li>إدارة الكميات (BOQ)</li>
           <li>دراسات الجدوى</li>
@@ -79,7 +80,7 @@
       <div class="plan">
         <h2>Premium</h2>
         <div class="apps">PMX-PILOT · PMX-BUILD</div>
-        <div class="price">199 <span>AED/شهر</span></div>
+        <div class="price">54.20 <span>USD/شهر (~199 AED)</span></div>
         <ul>
           <li>إدارة المشاريع</li>
           <li>BIM وإدارة البناء</li>
@@ -97,14 +98,14 @@
     <div class="footer">PMX Engineering Suite © 2026 — جميع المدفوعات عبر PayPal</div>
   </div>
 
-  <!-- PayPal SDK (Sandbox) -->
-  <script src="https://www.paypal.com/sdk/js?client_id=BAA20OIsS3jOcDn4e9nepxUJO82iyBQvm13Hj8_47OB2UciwhVL75O0IFu6c55kpFsVsf2EghnEN1gVV20&currency=AED&vault=true&enable-funding=venmo" data-namespace="paypal_sdk"></script>
+  <!-- PayPal SDK (Live) -->
+  <script src="https://www.paypal.com/sdk/js?client_id=BAAQTxGE6gz17PmNcMKDtWZpf71btkbvBxBtJZFHhu-pgWaxEOHZpxCX94MEJqWKTIl0D7Ws8o15l6GZCY&currency=AED&vault=true&enable-funding=venmo" data-namespace="paypal_sdk"></script>
 
   <script>
     const PLANS = {
-      basic: { price: '49.00', desc: 'PMX Basic — 3 Apps' },
-      pro: { price: '99.00', desc: 'PMX Pro — 4 Apps' },
-      premium: { price: '199.00', desc: 'PMX Premium — 2 Apps' }
+      basic: { price: '13.35', desc: 'PMX Basic — 3 Apps' },
+      pro: { price: '26.95', desc: 'PMX Pro — 4 Apps' },
+      premium: { price: '54.20', desc: 'PMX Premium — 2 Apps' }
     };
 
     // Render PayPal buttons for each plan
@@ -113,12 +114,12 @@
         style: { color: 'gold', shape: 'rect', label: 'subscribe', layout: 'horizontal', tagline: false },
         createSubscription: function(data, actions) {
           return actions.subscription.create({
-            plan_id: key === 'basic' ? 'P-2TU68145T86991135NJBY5WQ' : key === 'pro' ? 'P-7XF72057H9297333TNJBY5XA' : 'P-3RM057081R577733PNJBY5XI',
+            plan_id: key === 'basic' ? 'P-7UW44892L4022230JNJB46ZI' : key === 'pro' ? 'P-1G0961625K0022921NJB46ZQ' : 'P-37651761TT8653615NJB46ZQ',
             custom_id: key
           });
         },
         onApprove: function(data) {
-          fetch('http://localhost:3456/webhooks/pmx/subscribed', {
+          fetch('https://pmxs.space/webhooks/pmx/subscribed', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ plan: key, subscriptionId: data.subscriptionID, time: new Date().toISOString() })
