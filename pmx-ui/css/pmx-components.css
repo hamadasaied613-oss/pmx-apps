@@ -609,3 +609,108 @@ body {
 
 .pmx-mt-md { margin-top: 16px; }
 .px-mb-md { margin-bottom: 16px; }
+
+/* 13. Loading Skeletons */
+.pmx-skeleton {
+  background: linear-gradient(90deg, var(--pmx-surface) 25%, var(--pmx-secondary) 50%, var(--pmx-surface) 75%);
+  background-size: 200% 100%;
+  animation: pmx-shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+@keyframes pmx-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.pmx-skeleton-text { height: 14px; margin-bottom: 8px; width: 80%; }
+.pmx-skeleton-title { height: 22px; margin-bottom: 12px; width: 60%; }
+.pmx-skeleton-card { height: 120px; border-radius: var(--pmx-radius); }
+.pmx-skeleton-cell { height: 16px; margin: 4px 0; }
+
+/* 14. Toast Notifications */
+.pmx-toast-container {
+  position: fixed; top: 20px; right: 20px; z-index: 9999;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.pmx-toast {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; color: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transform: translateX(120%); transition: transform 0.3s ease;
+  max-width: 380px;
+}
+.pmx-toast.open { transform: translateX(0); }
+.pmx-toast-success { background: #27AE60; }
+.pmx-toast-error { background: #E74C3C; }
+.pmx-toast-warning { background: #F39C12; }
+.pmx-toast-info { background: #2980B9; }
+.pmx-toast-icon { font-size: 18px; flex-shrink: 0; }
+
+/* 15. Demo Data Badge */
+.pmx-demo-badge {
+  position: fixed; bottom: 90px; right: 24px;
+  background: rgba(201,168,76,0.15); border: 1px solid #C9A84C;
+  color: #C9A84C; padding: 6px 14px; border-radius: 20px;
+  font-size: 10px; letter-spacing: 0.5px;
+  z-index: 999; backdrop-filter: blur(4px);
+}
+
+/* 16. Responsive Design */
+@media (max-width: 1024px) {
+  .pmx-sidenav { width: 200px; }
+  .pmx-content { margin-left: 200px; }
+  .pmx-kpi-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); padding: 16px; }
+}
+@media (max-width: 768px) {
+  .pmx-sidenav { width: 56px; overflow: hidden; }
+  .pmx-sidenav:hover { width: 200px; }
+  .pmx-sidenav-item { padding: 10px 16px; white-space: nowrap; }
+  .pmx-sidenav-section { display: none; }
+  .pmx-content { margin-left: 56px; }
+  .pmx-header-brand span { display: none; }
+  .pmx-kpi-grid { grid-template-columns: 1fr; padding: 12px; }
+  .pmx-table-wrapper { padding: 12px; }
+  .pmx-table { font-size: 12px; }
+  .pmx-table th, .pmx-table td { padding: 8px 10px; }
+  .pmx-section { padding: 16px; }
+  .pmx-section-title { font-size: 20px; }
+  .pmx-whatsapp-panel { width: 300px; right: 0; }
+  .pmx-fin-card-amount { font-size: 24px; }
+  .pmx-bank-form { grid-template-columns: 1fr; padding: 16px; }
+}
+@media (max-width: 480px) {
+  .pmx-sidenav { width: 0; display: none; }
+  .pmx-content { margin-left: 0; }
+  .pmx-header { padding: 10px 16px; }
+  .pmx-header-user span { display: none; }
+  .pmx-kpi-value { font-size: 22px; }
+  .pmx-carousel-card { flex: 0 0 240px; }
+}
+
+/* 17. Print Styles */
+@media print {
+  .pmx-sidenav, .pmx-whatsapp, .pmx-demo-badge,
+  .pmx-toast-container, .pmx-header { display: none !important; }
+  .pmx-content { margin-left: 0 !important; padding-top: 0 !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .pmx-kpi-card, .pmx-table-wrapper, .pmx-section,
+  .pmx-fin-card { box-shadow: none !important; border: 1px solid #ccc !important; }
+  .pmx-kpi-value, .pmx-section-title { color: #000 !important; }
+  .pmx-btn { display: none !important; }
+}
+
+/* 18. RTL Support */
+[dir="rtl"] .pmx-sidenav { border-right: none; border-left: 1px solid var(--pmx-border); right: 0; left: auto; }
+[dir="rtl"] .pmx-content { margin-left: 0; margin-right: 240px; }
+[dir="rtl"] .pmx-kpi-icon { float: left; }
+[dir="rtl"] .pmx-whatsapp { right: auto; left: 24px; }
+[dir="rtl"] .pmx-whatsapp-panel { right: auto; left: 0; }
+[dir="rtl"] .pmx-table th { text-align: right; }
+@media (max-width: 768px) {
+  [dir="rtl"] .pmx-content { margin-right: 56px; }
+}
+@media (max-width: 480px) {
+  [dir="rtl"] .pmx-content { margin-right: 0; }
+}
+
+/* 19. Focus/Active states for accessibility */
+.pmx-sidenav-item:focus-visible,
+.pmx-btn:focus-visible,
+.pmx-table a:focus-visible { outline: 2px solid var(--pmx-accent); outline-offset: 2px; }

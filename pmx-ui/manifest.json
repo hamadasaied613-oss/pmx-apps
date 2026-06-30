@@ -1,0 +1,20 @@
+{
+  "name": "PMX Engineering Suite",
+  "short_name": "PMX",
+  "description": "9 integrated engineering applications — BOQ, SIGN, FOCUS, PILOT, BUILD, VIEW, SITE, LINK, WISE",
+  "start_url": "/pmx-apps/apps/index.html",
+  "display": "standalone",
+  "background_color": "#0A1628",
+  "theme_color": "#C9A84C",
+  "icons": [
+    {
+      "src": "../pmx-ui/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["engineering", "construction", "productivity"],
+  "lang": "ar",
+  "dir": "rtl"
+}
